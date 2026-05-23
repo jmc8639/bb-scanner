@@ -79,7 +79,7 @@ SIL      BULL       BULL       BULL       $88.11
 FXI      BULL       BULL       BULL       $35.52      
 EWZ      BULL       BULL       BULL       $36.37      
 EEM      BULL       BULL       BULL       $65.88      
-BTC      NEUTRAL    NEUTRAL    BULL       $33.53      
+BTC-USD  NEUTRAL    BULL       BULL       $75359.99   
 MSTR     BULL       BEAR       BULL       $159.89     
 
 ==============================================================================

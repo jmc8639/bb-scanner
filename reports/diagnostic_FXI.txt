@@ -1,0 +1,445 @@
+==============================================================================
+DIAGNOSTIC TRACE for FXI
+History: 2006-05-23 to 2026-05-22 (5032 daily bars)
+==============================================================================
+
+--- MONTHLY TIMEFRAME ---
+Bars: 241
+Final state: BULL
+Last confirmation: 2015-02-28 at $32.96
+Number of state changes in history: 1
+
+Full event trace (chronological):
+  2008-10-31  SWING_LOW_AT_LOWER        price=12.87, lower_band=16.32 -- becomes pending reference low
+  2010-11-30  SWING_HIGH_AT_UPPER       price=32.96, upper_band=31.55 -- becomes pending reference high
+  2010-11-30  ROUND_TRIP_UP             bar_high=32.96 touched upper_band=31.55; round-trip complete for pending low $12.87
+  2011-08-31  ROUND_TRIP_DOWN           bar_low=24.55 touched lower_band=25.51; round-trip complete for pending high $32.96
+  2011-10-31  SWING_LOW_AT_LOWER        price=20.06, lower_band=23.85 -- becomes pending reference low
+  2014-07-31  ROUND_TRIP_UP             bar_high=31.20 touched upper_band=30.70; round-trip complete for pending low $20.06
+  2015-02-28  *** BULL CONFIRMED ***    close=33.48 broke above reference high $32.96 (was NEUTRAL)
+  2015-04-30  SWING_HIGH_AT_UPPER       price=40.43, upper_band=36.28 -- becomes pending reference high
+  2016-01-31  ROUND_TRIP_DOWN           bar_low=22.64 touched lower_band=23.75; round-trip complete for pending high $40.43
+  2016-02-29  SWING_LOW_AT_LOWER        price=22.08, lower_band=22.96 -- becomes pending reference low
+  2017-03-31  ROUND_TRIP_UP             bar_high=32.18 touched upper_band=31.97; round-trip complete for pending low $22.08
+  2018-01-31  SWING_HIGH_AT_UPPER       price=44.67, upper_band=41.11 -- becomes pending reference high
+  2020-01-31  SWING_HIGH_AT_UPPER       price=39.50, upper_band=38.53 -- becomes pending reference high
+  2020-03-31  SWING_LOW_AT_LOWER        price=28.87, lower_band=32.13 -- becomes pending reference low
+  2020-03-31  ROUND_TRIP_DOWN           bar_low=28.87 touched lower_band=32.13; round-trip complete for pending high $39.50
+  2020-07-31  ROUND_TRIP_UP             bar_high=40.39 touched upper_band=38.45; round-trip complete for pending low $28.87
+  2021-02-28  SWING_HIGH_AT_UPPER       price=48.68, upper_band=43.76 -- becomes pending reference high
+  2022-02-28  ROUND_TRIP_DOWN           bar_low=30.68 touched lower_band=30.90; round-trip complete for pending high $48.68
+  2022-03-31  SWING_LOW_AT_LOWER        price=23.67, lower_band=29.46 -- becomes pending reference low
+  2022-10-31  SWING_LOW_AT_LOWER        price=18.98, lower_band=20.44 -- becomes pending reference low
+  2024-09-30  ROUND_TRIP_UP             bar_high=31.53 touched upper_band=29.33; round-trip complete for pending low $18.98
+
+--- WEEKLY TIMEFRAME ---
+Bars: 1044
+Final state: BULL
+Last confirmation: 2014-07-25 at $29.08
+Number of state changes in history: 3
+
+Full event trace (chronological):
+  2007-01-05  SWING_HIGH_AT_UPPER       price=25.53, upper_band=23.66 -- becomes pending reference high
+  2007-11-02  SWING_HIGH_AT_UPPER       price=47.49, upper_band=47.02 -- becomes pending reference high
+  2008-01-25  SWING_LOW_AT_LOWER        price=29.54, lower_band=31.65 -- becomes pending reference low
+  2008-01-25  ROUND_TRIP_DOWN           bar_low=29.54 touched lower_band=31.65; round-trip complete for pending high $47.49
+  2008-03-21  SWING_LOW_AT_LOWER        price=26.23, lower_band=26.81 -- becomes pending reference low
+  2008-10-31  SWING_LOW_AT_LOWER        price=12.87, lower_band=15.51 -- becomes pending reference low
+  2009-04-17  ROUND_TRIP_UP             bar_high=22.27 touched upper_band=22.18; round-trip complete for pending low $12.87
+  2009-06-12  SWING_HIGH_AT_UPPER       price=27.29, upper_band=27.22 -- becomes pending reference high
+  2009-11-20  SWING_HIGH_AT_UPPER       price=31.52, upper_band=31.07 -- becomes pending reference high
+  2010-01-22  ROUND_TRIP_DOWN           bar_low=26.50 touched lower_band=26.65; round-trip complete for pending high $31.52
+  2010-02-05  SWING_LOW_AT_LOWER        price=24.89, lower_band=25.62 -- becomes pending reference low
+  2010-05-07  SWING_LOW_AT_LOWER        price=24.61, lower_band=25.10 -- becomes pending reference low
+  2010-10-08  ROUND_TRIP_UP             bar_high=30.62 touched upper_band=30.19; round-trip complete for pending low $24.61
+  2010-10-15  *** BULL CONFIRMED ***    close=31.73 broke above reference high $31.52 (was NEUTRAL)
+  2010-11-12  SWING_HIGH_AT_UPPER       price=32.96, upper_band=32.71 -- becomes pending reference high
+  2011-02-11  SWING_LOW_AT_LOWER        price=28.13, lower_band=28.19 -- becomes pending reference low
+  2011-02-11  ROUND_TRIP_DOWN           bar_low=28.13 touched lower_band=28.19; round-trip complete for pending high $32.96
+  2011-04-01  ROUND_TRIP_UP             bar_high=31.52 touched upper_band=31.17; round-trip complete for pending low $28.13
+  2011-04-22  SWING_HIGH_AT_UPPER       price=32.00, upper_band=31.99 -- becomes pending reference high
+  2011-08-05  ROUND_TRIP_DOWN           bar_low=26.32 touched lower_band=27.81; round-trip complete for pending high $32.00
+  2011-08-05  *** BEAR CONFIRMED ***    close=27.17 broke below reference low $28.13 (was BULL)
+  2011-08-12  SWING_LOW_AT_LOWER        price=24.55, lower_band=26.87 -- becomes pending reference low
+  2011-10-07  SWING_LOW_AT_LOWER        price=20.06, lower_band=21.36 -- becomes pending reference low
+  2012-10-12  ROUND_TRIP_UP             bar_high=26.32 touched upper_band=26.15; round-trip complete for pending low $20.06
+  2013-01-04  SWING_HIGH_AT_UPPER       price=30.29, upper_band=29.65 -- becomes pending reference high
+  2013-04-05  ROUND_TRIP_DOWN           bar_low=25.16 touched lower_band=25.57; round-trip complete for pending high $30.29
+  2013-04-19  SWING_LOW_AT_LOWER        price=24.90, lower_band=25.26 -- becomes pending reference low
+  2013-06-28  SWING_LOW_AT_LOWER        price=22.69, lower_band=23.76 -- becomes pending reference low
+  2013-09-13  ROUND_TRIP_UP             bar_high=28.82 touched upper_band=28.65; round-trip complete for pending low $22.69
+  2013-09-20  SWING_HIGH_AT_UPPER       price=29.08, upper_band=28.89 -- becomes pending reference high
+  2014-01-24  ROUND_TRIP_DOWN           bar_low=25.45 touched lower_band=25.94; round-trip complete for pending high $29.08
+  2014-07-25  *** BULL CONFIRMED ***    close=30.36 broke above reference high $29.08 (was BEAR)
+  2015-05-01  SWING_HIGH_AT_UPPER       price=40.43, upper_band=39.57 -- becomes pending reference high
+  2015-07-10  SWING_LOW_AT_LOWER        price=29.90, lower_band=30.62 -- becomes pending reference low
+  2015-07-10  ROUND_TRIP_DOWN           bar_low=29.90 touched lower_band=30.62; round-trip complete for pending high $40.43
+  2015-08-28  SWING_LOW_AT_LOWER        price=25.22, lower_band=27.38 -- becomes pending reference low
+  2016-02-12  SWING_LOW_AT_LOWER        price=22.08, lower_band=22.18 -- becomes pending reference low
+  2016-07-15  ROUND_TRIP_UP             bar_high=28.19 touched upper_band=27.90; round-trip complete for pending low $22.08
+  2016-12-23  SWING_LOW_AT_LOWER        price=27.38, lower_band=27.78 -- becomes pending reference low
+  2017-02-17  ROUND_TRIP_UP             bar_high=31.37 touched upper_band=31.13; round-trip complete for pending low $27.38
+  2017-03-24  SWING_HIGH_AT_UPPER       price=32.18, upper_band=32.10 -- becomes pending reference high
+  2018-01-26  SWING_HIGH_AT_UPPER       price=44.67, upper_band=42.90 -- becomes pending reference high
+  2018-06-22  ROUND_TRIP_DOWN           bar_low=36.58 touched lower_band=37.06; round-trip complete for pending high $44.67
+  2018-11-02  SWING_LOW_AT_LOWER        price=31.72, lower_band=32.85 -- becomes pending reference low
+  2019-01-04  SWING_LOW_AT_LOWER        price=32.20, lower_band=32.21 -- becomes pending reference low
+  2019-02-01  ROUND_TRIP_UP             bar_high=36.59 touched upper_band=36.53; round-trip complete for pending low $32.20
+  2020-01-17  SWING_HIGH_AT_UPPER       price=39.50, upper_band=39.21 -- becomes pending reference high
+  2020-03-13  ROUND_TRIP_DOWN           bar_low=30.79 touched lower_band=33.22; round-trip complete for pending high $39.50
+  2020-03-20  SWING_LOW_AT_LOWER        price=28.87, lower_band=31.84 -- becomes pending reference low
+  2020-07-10  SWING_HIGH_AT_UPPER       price=40.39, upper_band=38.15 -- becomes pending reference high
+  2020-07-10  ROUND_TRIP_UP             bar_high=40.39 touched upper_band=38.15; round-trip complete for pending low $28.87
+  2020-11-13  SWING_HIGH_AT_UPPER       price=43.48, upper_band=41.53 -- becomes pending reference high
+  2021-02-19  SWING_HIGH_AT_UPPER       price=48.68, upper_band=48.10 -- becomes pending reference high
+  2021-05-14  SWING_LOW_AT_LOWER        price=38.75, lower_band=38.78 -- becomes pending reference low
+  2021-05-14  ROUND_TRIP_DOWN           bar_low=38.75 touched lower_band=38.78; round-trip complete for pending high $48.68
+  2021-07-30  SWING_LOW_AT_LOWER        price=34.25, lower_band=37.72 -- becomes pending reference low
+  2022-01-07  SWING_LOW_AT_LOWER        price=31.91, lower_band=32.18 -- becomes pending reference low
+  2022-03-18  SWING_LOW_AT_LOWER        price=23.67, lower_band=28.49 -- becomes pending reference low
+  2022-11-04  SWING_LOW_AT_LOWER        price=18.98, lower_band=19.62 -- becomes pending reference low
+  2023-01-13  ROUND_TRIP_UP             bar_high=29.85 touched upper_band=29.79; round-trip complete for pending low $18.98
+  2023-06-02  SWING_LOW_AT_LOWER        price=23.70, lower_band=23.86 -- becomes pending reference low
+  2023-07-28  ROUND_TRIP_UP             bar_high=28.10 touched upper_band=27.87; round-trip complete for pending low $23.70
+  2023-08-04  SWING_HIGH_AT_UPPER       price=28.53, upper_band=27.99 -- becomes pending reference high
+  2023-08-25  SWING_LOW_AT_LOWER        price=24.14, lower_band=24.25 -- becomes pending reference low
+  2023-08-25  ROUND_TRIP_DOWN           bar_low=24.14 touched lower_band=24.25; round-trip complete for pending high $28.53
+  2024-01-26  SWING_LOW_AT_LOWER        price=19.99, lower_band=20.73 -- becomes pending reference low
+  2024-04-26  ROUND_TRIP_UP             bar_high=24.94 touched upper_band=24.36; round-trip complete for pending low $19.99
+  2024-05-17  SWING_HIGH_AT_UPPER       price=28.29, upper_band=26.98 -- becomes pending reference high
+  2024-10-11  SWING_HIGH_AT_UPPER       price=36.04, upper_band=31.79 -- becomes pending reference high
+  2025-03-21  SWING_HIGH_AT_UPPER       price=37.78, upper_band=37.09 -- becomes pending reference high
+  2025-10-03  SWING_HIGH_AT_UPPER       price=41.55, upper_band=41.39 -- becomes pending reference high
+  2026-01-30  SWING_HIGH_AT_UPPER       price=41.17, upper_band=40.83 -- becomes pending reference high
+  2026-02-20  ROUND_TRIP_DOWN           bar_low=37.93 touched lower_band=38.02; round-trip complete for pending high $41.17
+  2026-03-27  SWING_LOW_AT_LOWER        price=34.77, lower_band=35.18 -- becomes pending reference low
+
+--- DAILY TIMEFRAME ---
+Bars: 5032
+Final state: BULL
+Last confirmation: 2024-06-27 at $23.78
+Number of state changes in history: 17
+
+Full event trace (chronological):
+  2006-08-16  SWING_HIGH_AT_UPPER       price=17.58, upper_band=17.48 -- becomes pending reference high
+  2006-09-11  SWING_LOW_AT_LOWER        price=16.51, lower_band=16.53 -- becomes pending reference low
+  2006-09-11  ROUND_TRIP_DOWN           bar_low=16.51 touched lower_band=16.53; round-trip complete for pending high $17.58
+  2006-09-18  ROUND_TRIP_UP             bar_high=17.24 touched upper_band=17.24; round-trip complete for pending low $16.51
+  2006-09-21  SWING_HIGH_AT_UPPER       price=17.53, upper_band=17.36 -- becomes pending reference high
+  2007-01-03  SWING_HIGH_AT_UPPER       price=25.53, upper_band=24.91 -- becomes pending reference high
+  2007-02-27  ROUND_TRIP_DOWN           bar_low=20.02 touched lower_band=21.59; round-trip complete for pending high $25.53
+  2007-03-05  SWING_LOW_AT_LOWER        price=19.42, lower_band=20.22 -- becomes pending reference low
+  2007-04-16  ROUND_TRIP_UP             bar_high=24.33 touched upper_band=24.23; round-trip complete for pending low $19.42
+  2007-04-17  SWING_HIGH_AT_UPPER       price=24.43, upper_band=24.40 -- becomes pending reference high
+  2007-05-01  SWING_LOW_AT_LOWER        price=22.69, lower_band=22.70 -- becomes pending reference low
+  2007-05-01  ROUND_TRIP_DOWN           bar_low=22.69 touched lower_band=22.70; round-trip complete for pending high $24.43
+  2007-05-11  ROUND_TRIP_UP             bar_high=25.13 touched upper_band=24.68; round-trip complete for pending low $22.69
+  2007-05-11  *** BULL CONFIRMED ***    close=24.87 broke above reference high $24.43 (was NEUTRAL)
+  2007-05-16  SWING_HIGH_AT_UPPER       price=25.20, upper_band=25.10 -- becomes pending reference high
+  2007-08-03  ROUND_TRIP_DOWN           bar_low=27.97 touched lower_band=28.65; round-trip complete for pending high $25.20
+  2007-08-06  SWING_LOW_AT_LOWER        price=27.25, lower_band=28.40 -- becomes pending reference low
+  2007-08-16  SWING_LOW_AT_LOWER        price=24.05, lower_band=26.26 -- becomes pending reference low
+  2007-08-27  SWING_HIGH_AT_UPPER       price=33.42, upper_band=32.04 -- becomes pending reference high
+  2007-08-27  ROUND_TRIP_UP             bar_high=33.42 touched upper_band=32.04; round-trip complete for pending low $24.05
+  2007-10-02  SWING_HIGH_AT_UPPER       price=41.54, upper_band=41.39 -- becomes pending reference high
+  2007-10-17  SWING_HIGH_AT_UPPER       price=47.25, upper_band=46.04 -- becomes pending reference high
+  2007-11-05  ROUND_TRIP_DOWN           bar_low=40.46 touched lower_band=40.54; round-trip complete for pending high $47.25
+  2008-01-22  SWING_LOW_AT_LOWER        price=29.54, lower_band=32.05 -- becomes pending reference low
+  2008-03-20  SWING_LOW_AT_LOWER        price=26.23, lower_band=26.66 -- becomes pending reference low
+  2008-04-03  ROUND_TRIP_UP             bar_high=32.54 touched upper_band=32.53; round-trip complete for pending low $26.23
+  2008-05-27  SWING_LOW_AT_LOWER        price=32.01, lower_band=32.31 -- becomes pending reference low
+  2008-06-11  SWING_LOW_AT_LOWER        price=29.61, lower_band=29.96 -- becomes pending reference low
+  2008-07-03  SWING_LOW_AT_LOWER        price=27.37, lower_band=27.75 -- becomes pending reference low
+  2008-07-21  ROUND_TRIP_UP             bar_high=30.83 touched upper_band=30.72; round-trip complete for pending low $27.37
+  2008-07-23  SWING_HIGH_AT_UPPER       price=31.75, upper_band=31.31 -- becomes pending reference high
+  2008-08-08  ROUND_TRIP_DOWN           bar_low=27.98 touched lower_band=28.31; round-trip complete for pending high $31.75
+  2008-08-13  *** BEAR CONFIRMED ***    close=27.26 broke below reference low $27.37 (was BULL)
+  2008-09-17  SWING_LOW_AT_LOWER        price=20.12, lower_band=21.98 -- becomes pending reference low
+  2008-10-10  SWING_LOW_AT_LOWER        price=16.17, lower_band=17.13 -- becomes pending reference low
+  2008-10-27  SWING_LOW_AT_LOWER        price=12.87, lower_band=13.40 -- becomes pending reference low
+  2008-12-08  ROUND_TRIP_UP             bar_high=20.45 touched upper_band=19.71; round-trip complete for pending low $12.87
+  2009-01-06  SWING_HIGH_AT_UPPER       price=21.56, upper_band=21.52 -- becomes pending reference high
+  2009-01-12  ROUND_TRIP_DOWN           bar_low=17.41 touched lower_band=17.65; round-trip complete for pending high $21.56
+  2009-02-06  SWING_HIGH_AT_UPPER       price=19.22, upper_band=18.72 -- becomes pending reference high
+  2009-03-02  SWING_LOW_AT_LOWER        price=15.19, lower_band=15.51 -- becomes pending reference low
+  2009-03-02  ROUND_TRIP_DOWN           bar_low=15.19 touched lower_band=15.51; round-trip complete for pending high $19.22
+  2009-03-16  ROUND_TRIP_UP             bar_high=18.65 touched upper_band=18.19; round-trip complete for pending low $15.19
+  2009-03-23  *** BULL CONFIRMED ***    close=19.48 broke above reference high $19.22 (was BEAR)
+  2009-05-08  SWING_HIGH_AT_UPPER       price=25.44, upper_band=23.96 -- becomes pending reference high
+  2009-06-01  SWING_HIGH_AT_UPPER       price=26.61, upper_band=25.43 -- becomes pending reference high
+  2009-08-17  SWING_LOW_AT_LOWER        price=26.21, lower_band=26.89 -- becomes pending reference low
+  2009-08-17  ROUND_TRIP_DOWN           bar_low=26.21 touched lower_band=26.89; round-trip complete for pending high $26.61
+  2009-09-01  SWING_LOW_AT_LOWER        price=25.89, lower_band=26.08 -- becomes pending reference low
+  2009-09-08  ROUND_TRIP_UP             bar_high=28.71 touched upper_band=28.64; round-trip complete for pending low $25.89
+  2009-09-17  SWING_HIGH_AT_UPPER       price=29.83, upper_band=29.83 -- becomes pending reference high
+  2009-10-01  ROUND_TRIP_DOWN           bar_low=26.76 touched lower_band=26.80; round-trip complete for pending high $29.83
+  2009-10-02  SWING_LOW_AT_LOWER        price=26.40, lower_band=26.77 -- becomes pending reference low
+  2009-11-09  ROUND_TRIP_UP             bar_high=30.92 touched upper_band=30.77; round-trip complete for pending low $26.40
+  2009-11-16  SWING_HIGH_AT_UPPER       price=31.52, upper_band=31.42 -- becomes pending reference high
+  2009-12-09  ROUND_TRIP_DOWN           bar_low=29.13 touched lower_band=29.15; round-trip complete for pending high $31.52
+  2009-12-18  SWING_LOW_AT_LOWER        price=27.82, lower_band=28.17 -- becomes pending reference low
+  2010-01-06  SWING_HIGH_AT_UPPER       price=30.27, upper_band=30.24 -- becomes pending reference high
+  2010-01-06  ROUND_TRIP_UP             bar_high=30.27 touched upper_band=30.24; round-trip complete for pending low $27.82
+  2010-01-21  ROUND_TRIP_DOWN           bar_low=26.84 touched lower_band=27.22; round-trip complete for pending high $30.27
+  2010-01-21  *** BEAR CONFIRMED ***    close=26.90 broke below reference low $27.82 (was BULL)
+  2010-01-27  SWING_LOW_AT_LOWER        price=25.61, lower_band=25.82 -- becomes pending reference low
+  2010-03-02  ROUND_TRIP_UP             bar_high=28.01 touched upper_band=27.85; round-trip complete for pending low $25.61
+  2010-05-06  SWING_LOW_AT_LOWER        price=24.61, lower_band=25.96 -- becomes pending reference low
+  2010-05-21  SWING_LOW_AT_LOWER        price=24.69, lower_band=25.03 -- becomes pending reference low
+  2010-06-10  ROUND_TRIP_UP             bar_high=27.33 touched upper_band=27.30; round-trip complete for pending low $24.69
+  2010-06-21  SWING_HIGH_AT_UPPER       price=28.89, upper_band=28.46 -- becomes pending reference high
+  2010-08-02  SWING_HIGH_AT_UPPER       price=29.21, upper_band=29.05 -- becomes pending reference high
+  2010-08-25  SWING_LOW_AT_LOWER        price=26.81, lower_band=26.84 -- becomes pending reference low
+  2010-08-25  ROUND_TRIP_DOWN           bar_low=26.81 touched lower_band=26.84; round-trip complete for pending high $29.21
+  2010-09-13  ROUND_TRIP_UP             bar_high=28.83 touched upper_band=28.65; round-trip complete for pending low $26.81
+  2010-09-24  *** BULL CONFIRMED ***    close=29.43 broke above reference high $29.21 (was BEAR)
+  2011-01-12  SWING_HIGH_AT_UPPER       price=30.93, upper_band=30.81 -- becomes pending reference high
+  2011-01-28  SWING_LOW_AT_LOWER        price=28.89, lower_band=29.15 -- becomes pending reference low
+  2011-01-28  ROUND_TRIP_DOWN           bar_low=28.89 touched lower_band=29.15; round-trip complete for pending high $30.93
+  2011-02-10  SWING_LOW_AT_LOWER        price=28.13, lower_band=28.42 -- becomes pending reference low
+  2011-02-24  SWING_LOW_AT_LOWER        price=28.15, lower_band=28.19 -- becomes pending reference low
+  2011-03-07  ROUND_TRIP_UP             bar_high=30.24 touched upper_band=30.05; round-trip complete for pending low $28.15
+  2011-03-09  SWING_HIGH_AT_UPPER       price=30.70, upper_band=30.52 -- becomes pending reference high
+  2011-05-03  ROUND_TRIP_DOWN           bar_low=30.49 touched lower_band=30.71; round-trip complete for pending high $30.70
+  2011-05-31  SWING_HIGH_AT_UPPER       price=31.29, upper_band=30.98 -- becomes pending reference high
+  2011-06-10  ROUND_TRIP_DOWN           bar_low=29.09 touched lower_band=29.17; round-trip complete for pending high $31.29
+  2011-06-23  SWING_LOW_AT_LOWER        price=28.29, lower_band=28.33 -- becomes pending reference low
+  2011-07-01  SWING_HIGH_AT_UPPER       price=30.43, upper_band=30.43 -- becomes pending reference high
+  2011-07-01  ROUND_TRIP_UP             bar_high=30.43 touched upper_band=30.43; round-trip complete for pending low $28.29
+  2011-08-03  ROUND_TRIP_DOWN           bar_low=28.09 touched lower_band=28.49; round-trip complete for pending high $30.43
+  2011-08-04  *** BEAR CONFIRMED ***    close=27.51 broke below reference low $28.29 (was BULL)
+  2011-08-10  SWING_LOW_AT_LOWER        price=24.55, lower_band=25.42 -- becomes pending reference low
+  2011-10-04  SWING_LOW_AT_LOWER        price=20.06, lower_band=20.41 -- becomes pending reference low
+  2011-10-27  SWING_HIGH_AT_UPPER       price=27.18, upper_band=26.35 -- becomes pending reference high
+  2011-10-27  ROUND_TRIP_UP             bar_high=27.18 touched upper_band=26.35; round-trip complete for pending low $20.06
+  2011-11-21  ROUND_TRIP_DOWN           bar_low=23.69 touched lower_band=23.97; round-trip complete for pending high $27.18
+  2011-11-23  SWING_LOW_AT_LOWER        price=23.36, lower_band=23.53 -- becomes pending reference low
+  2012-01-10  ROUND_TRIP_UP             bar_high=26.06 touched upper_band=25.63; round-trip complete for pending low $23.36
+  2012-01-23  *** BULL CONFIRMED ***    close=27.28 broke above reference high $27.18 (was BEAR)
+  2012-03-06  SWING_LOW_AT_LOWER        price=26.38, lower_band=27.07 -- becomes pending reference low
+  2012-03-29  SWING_LOW_AT_LOWER        price=25.08, lower_band=25.22 -- becomes pending reference low
+  2012-04-19  ROUND_TRIP_UP             bar_high=26.79 touched upper_band=26.70; round-trip complete for pending low $25.08
+  2012-04-20  SWING_HIGH_AT_UPPER       price=26.95, upper_band=26.81 -- becomes pending reference high
+  2012-05-08  ROUND_TRIP_DOWN           bar_low=25.29 touched lower_band=25.56; round-trip complete for pending high $26.95
+  2012-05-11  *** BEAR CONFIRMED ***    close=24.82 broke below reference low $25.08 (was BULL)
+  2012-06-19  SWING_HIGH_AT_UPPER       price=24.72, upper_band=24.45 -- becomes pending reference high
+  2012-08-24  ROUND_TRIP_DOWN           bar_low=24.24 touched lower_band=24.28; round-trip complete for pending high $24.72
+  2012-09-05  SWING_LOW_AT_LOWER        price=23.05, lower_band=23.21 -- becomes pending reference low
+  2012-09-13  *** BULL CONFIRMED ***    close=24.90 broke above reference high $24.72 (was BEAR)
+  2012-09-14  SWING_HIGH_AT_UPPER       price=25.63, upper_band=25.37 -- becomes pending reference high
+  2012-11-13  ROUND_TRIP_DOWN           bar_low=25.67 touched lower_band=25.96; round-trip complete for pending high $25.63
+  2012-11-15  SWING_LOW_AT_LOWER        price=25.53, lower_band=25.68 -- becomes pending reference low
+  2012-12-05  ROUND_TRIP_UP             bar_high=27.69 touched upper_band=27.32; round-trip complete for pending low $25.53
+  2013-01-03  SWING_HIGH_AT_UPPER       price=30.29, upper_band=29.85 -- becomes pending reference high
+  2013-02-04  ROUND_TRIP_DOWN           bar_low=29.27 touched lower_band=29.32; round-trip complete for pending high $30.29
+  2013-02-07  SWING_LOW_AT_LOWER        price=28.39, lower_band=28.94 -- becomes pending reference low
+  2013-03-19  SWING_LOW_AT_LOWER        price=25.95, lower_band=26.49 -- becomes pending reference low
+  2013-04-05  SWING_LOW_AT_LOWER        price=25.16, lower_band=25.50 -- becomes pending reference low
+  2013-04-17  SWING_LOW_AT_LOWER        price=24.90, lower_band=25.13 -- becomes pending reference low
+  2013-04-25  ROUND_TRIP_UP             bar_high=26.89 touched upper_band=26.87; round-trip complete for pending low $24.90
+  2013-06-14  *** BEAR CONFIRMED ***    close=24.53 broke below reference low $24.90 (was BULL)
+  2013-06-24  SWING_LOW_AT_LOWER        price=22.69, lower_band=23.09 -- becomes pending reference low
+  2013-07-11  SWING_HIGH_AT_UPPER       price=25.36, upper_band=25.33 -- becomes pending reference high
+  2013-07-11  ROUND_TRIP_UP             bar_high=25.36 touched upper_band=25.33; round-trip complete for pending low $22.69
+  2013-07-23  SWING_HIGH_AT_UPPER       price=25.88, upper_band=25.71 -- becomes pending reference high
+  2013-08-13  SWING_HIGH_AT_UPPER       price=27.13, upper_band=26.56 -- becomes pending reference high
+  2013-09-10  SWING_HIGH_AT_UPPER       price=28.82, upper_band=28.42 -- becomes pending reference high
+  2013-10-23  ROUND_TRIP_DOWN           bar_low=27.30 touched lower_band=27.44; round-trip complete for pending high $28.82
+  2013-10-25  SWING_LOW_AT_LOWER        price=26.91, lower_band=27.07 -- becomes pending reference low
+  2013-11-15  ROUND_TRIP_UP             bar_high=28.88 touched upper_band=28.51; round-trip complete for pending low $26.91
+  2013-11-18  SWING_HIGH_AT_UPPER       price=29.80, upper_band=28.88 -- becomes pending reference high
+  2013-12-17  ROUND_TRIP_DOWN           bar_low=28.03 touched lower_band=28.11; round-trip complete for pending high $29.80
+  2014-01-09  SWING_LOW_AT_LOWER        price=26.49, lower_band=26.62 -- becomes pending reference low
+  2014-04-25  SWING_LOW_AT_LOWER        price=25.52, lower_band=25.82 -- becomes pending reference low
+  2014-05-14  ROUND_TRIP_UP             bar_high=26.76 touched upper_band=26.75; round-trip complete for pending low $25.52
+  2014-07-03  SWING_HIGH_AT_UPPER       price=29.05, upper_band=28.82 -- becomes pending reference high
+  2014-07-29  SWING_HIGH_AT_UPPER       price=31.20, upper_band=30.88 -- becomes pending reference high
+  2014-09-04  SWING_HIGH_AT_UPPER       price=32.16, upper_band=31.83 -- becomes pending reference high
+  2014-09-16  ROUND_TRIP_DOWN           bar_low=30.14 touched lower_band=30.18; round-trip complete for pending high $32.16
+  2014-10-02  SWING_LOW_AT_LOWER        price=27.74, lower_band=27.95 -- becomes pending reference low
+  2014-10-28  ROUND_TRIP_UP             bar_high=29.74 touched upper_band=29.58; round-trip complete for pending low $27.74
+  2014-10-31  SWING_HIGH_AT_UPPER       price=30.30, upper_band=30.01 -- becomes pending reference high
+  2014-11-14  SWING_HIGH_AT_UPPER       price=30.58, upper_band=30.57 -- becomes pending reference high
+  2014-12-08  SWING_HIGH_AT_UPPER       price=31.97, upper_band=31.72 -- becomes pending reference high
+  2015-01-23  SWING_HIGH_AT_UPPER       price=33.58, upper_band=33.48 -- becomes pending reference high
+  2015-03-06  ROUND_TRIP_DOWN           bar_low=31.45 touched lower_band=31.57; round-trip complete for pending high $33.58
+  2015-03-10  SWING_LOW_AT_LOWER        price=31.09, lower_band=31.33 -- becomes pending reference low
+  2015-03-30  ROUND_TRIP_UP             bar_high=34.38 touched upper_band=33.92; round-trip complete for pending low $31.09
+  2015-03-30  *** BULL CONFIRMED ***    close=34.23 broke above reference high $33.58 (was BEAR)
+  2015-05-07  SWING_LOW_AT_LOWER        price=37.40, lower_band=37.70 -- becomes pending reference low
+  2015-06-16  SWING_LOW_AT_LOWER        price=35.68, lower_band=35.99 -- becomes pending reference low
+  2015-07-08  SWING_LOW_AT_LOWER        price=29.90, lower_band=31.90 -- becomes pending reference low
+  2015-08-24  SWING_LOW_AT_LOWER        price=25.22, lower_band=27.81 -- becomes pending reference low
+  2015-10-07  ROUND_TRIP_UP             bar_high=29.92 touched upper_band=29.50; round-trip complete for pending low $25.22
+  2015-11-13  SWING_LOW_AT_LOWER        price=28.37, lower_band=28.64 -- becomes pending reference low
+  2015-12-11  SWING_LOW_AT_LOWER        price=26.52, lower_band=27.08 -- becomes pending reference low
+  2016-02-11  SWING_LOW_AT_LOWER        price=22.08, lower_band=22.37 -- becomes pending reference low
+  2016-03-02  ROUND_TRIP_UP             bar_high=25.20 touched upper_band=25.13; round-trip complete for pending low $22.08
+  2016-03-04  SWING_HIGH_AT_UPPER       price=26.01, upper_band=25.73 -- becomes pending reference high
+  2016-05-04  ROUND_TRIP_DOWN           bar_low=25.25 touched lower_band=25.27; round-trip complete for pending high $26.01
+  2016-06-27  SWING_LOW_AT_LOWER        price=25.30, lower_band=25.31 -- becomes pending reference low
+  2016-07-12  ROUND_TRIP_UP             bar_high=27.87 touched upper_band=27.81; round-trip complete for pending low $25.30
+  2016-08-15  SWING_HIGH_AT_UPPER       price=30.08, upper_band=29.60 -- becomes pending reference high
+  2016-09-08  SWING_HIGH_AT_UPPER       price=30.98, upper_band=30.73 -- becomes pending reference high
+  2016-10-13  SWING_LOW_AT_LOWER        price=29.14, lower_band=29.41 -- becomes pending reference low
+  2016-10-13  ROUND_TRIP_DOWN           bar_low=29.14 touched lower_band=29.41; round-trip complete for pending high $30.98
+  2016-11-14  SWING_LOW_AT_LOWER        price=28.09, lower_band=28.25 -- becomes pending reference low
+  2017-02-07  ROUND_TRIP_UP             bar_high=29.86 touched upper_band=29.83; round-trip complete for pending low $28.09
+  2017-03-09  SWING_LOW_AT_LOWER        price=30.06, lower_band=30.18 -- becomes pending reference low
+  2017-03-16  ROUND_TRIP_UP             bar_high=31.82 touched upper_band=31.78; round-trip complete for pending low $30.06
+  2017-03-21  SWING_HIGH_AT_UPPER       price=32.18, upper_band=32.04 -- becomes pending reference high
+  2017-04-11  ROUND_TRIP_DOWN           bar_low=30.77 touched lower_band=30.93; round-trip complete for pending high $32.18
+  2017-04-19  SWING_LOW_AT_LOWER        price=30.29, lower_band=30.47 -- becomes pending reference low
+  2017-05-05  SWING_LOW_AT_LOWER        price=30.29, lower_band=30.34 -- becomes pending reference low
+  2017-05-15  ROUND_TRIP_UP             bar_high=32.02 touched upper_band=31.78; round-trip complete for pending low $30.29
+  2017-08-08  SWING_HIGH_AT_UPPER       price=35.28, upper_band=35.27 -- becomes pending reference high
+  2017-08-28  SWING_HIGH_AT_UPPER       price=35.99, upper_band=35.89 -- becomes pending reference high
+  2017-09-21  SWING_HIGH_AT_UPPER       price=36.65, upper_band=36.59 -- becomes pending reference high
+  2017-09-25  SWING_LOW_AT_LOWER        price=35.04, lower_band=35.19 -- becomes pending reference low
+  2017-09-25  ROUND_TRIP_DOWN           bar_low=35.04 touched lower_band=35.19; round-trip complete for pending high $36.65
+  2017-10-03  ROUND_TRIP_UP             bar_high=36.93 touched upper_band=36.82; round-trip complete for pending low $35.04
+  2017-10-05  SWING_HIGH_AT_UPPER       price=37.65, upper_band=37.32 -- becomes pending reference high
+  2017-11-10  SWING_HIGH_AT_UPPER       price=38.23, upper_band=38.23 -- becomes pending reference high
+  2017-11-22  SWING_HIGH_AT_UPPER       price=39.22, upper_band=38.95 -- becomes pending reference high
+  2017-12-01  ROUND_TRIP_DOWN           bar_low=36.81 touched lower_band=36.88; round-trip complete for pending high $39.22
+  2017-12-07  SWING_LOW_AT_LOWER        price=36.08, lower_band=36.24 -- becomes pending reference low
+  2018-01-02  ROUND_TRIP_UP             bar_high=39.52 touched upper_band=38.90; round-trip complete for pending low $36.08
+  2018-02-09  SWING_LOW_AT_LOWER        price=36.89, lower_band=38.52 -- becomes pending reference low
+  2018-04-04  SWING_LOW_AT_LOWER        price=37.60, lower_band=37.81 -- becomes pending reference low
+  2018-05-03  SWING_LOW_AT_LOWER        price=37.76, lower_band=37.88 -- becomes pending reference low
+  2018-05-10  ROUND_TRIP_UP             bar_high=39.84 touched upper_band=39.49; round-trip complete for pending low $37.76
+  2018-05-14  SWING_HIGH_AT_UPPER       price=40.47, upper_band=39.91 -- becomes pending reference high
+  2018-06-18  ROUND_TRIP_DOWN           bar_low=37.87 touched lower_band=37.98; round-trip complete for pending high $40.47
+  2018-06-19  *** BEAR CONFIRMED ***    close=37.69 broke below reference low $37.76 (was BULL)
+  2018-07-19  SWING_LOW_AT_LOWER        price=34.56, lower_band=34.60 -- becomes pending reference low
+  2018-07-24  ROUND_TRIP_UP             bar_high=36.74 touched upper_band=36.54; round-trip complete for pending low $34.56
+  2018-07-25  SWING_HIGH_AT_UPPER       price=37.15, upper_band=36.78 -- becomes pending reference high
+  2018-08-15  SWING_LOW_AT_LOWER        price=33.56, lower_band=34.28 -- becomes pending reference low
+  2018-08-15  ROUND_TRIP_DOWN           bar_low=33.56 touched lower_band=34.28; round-trip complete for pending high $37.15
+  2018-09-11  SWING_LOW_AT_LOWER        price=33.38, lower_band=33.54 -- becomes pending reference low
+  2018-10-29  SWING_LOW_AT_LOWER        price=31.72, lower_band=31.81 -- becomes pending reference low
+  2018-11-02  ROUND_TRIP_UP             bar_high=35.16 touched upper_band=34.60; round-trip complete for pending low $31.72
+  2018-11-07  SWING_HIGH_AT_UPPER       price=35.23, upper_band=35.10 -- becomes pending reference high
+  2018-12-03  SWING_HIGH_AT_UPPER       price=36.09, upper_band=35.72 -- becomes pending reference high
+  2018-12-19  ROUND_TRIP_DOWN           bar_low=32.87 touched lower_band=33.18; round-trip complete for pending high $36.09
+  2019-01-31  *** BULL CONFIRMED ***    close=36.56 broke above reference high $36.09 (was BEAR)
+  2019-02-25  SWING_HIGH_AT_UPPER       price=38.35, upper_band=37.64 -- becomes pending reference high
+  2019-04-05  SWING_HIGH_AT_UPPER       price=38.95, upper_band=38.89 -- becomes pending reference high
+  2019-05-06  ROUND_TRIP_DOWN           bar_low=36.56 touched lower_band=37.10; round-trip complete for pending high $38.95
+  2019-06-20  SWING_HIGH_AT_UPPER       price=36.73, upper_band=35.99 -- becomes pending reference high
+  2019-07-01  SWING_HIGH_AT_UPPER       price=37.68, upper_band=37.47 -- becomes pending reference high
+  2019-07-31  ROUND_TRIP_DOWN           bar_low=34.85 touched lower_band=35.44; round-trip complete for pending high $37.68
+  2019-08-05  SWING_LOW_AT_LOWER        price=32.60, lower_band=33.87 -- becomes pending reference low
+  2019-09-04  ROUND_TRIP_UP             bar_high=34.29 touched upper_band=34.12; round-trip complete for pending low $32.60
+  2019-09-13  SWING_HIGH_AT_UPPER       price=35.93, upper_band=35.85 -- becomes pending reference high
+  2019-11-07  SWING_HIGH_AT_UPPER       price=37.04, upper_band=36.72 -- becomes pending reference high
+  2020-01-13  SWING_HIGH_AT_UPPER       price=39.50, upper_band=39.49 -- becomes pending reference high
+  2020-01-23  ROUND_TRIP_DOWN           bar_low=36.93 touched lower_band=37.19; round-trip complete for pending high $39.50
+  2020-01-31  SWING_LOW_AT_LOWER        price=34.47, lower_band=34.72 -- becomes pending reference low
+  2020-02-28  SWING_LOW_AT_LOWER        price=34.32, lower_band=34.50 -- becomes pending reference low
+  2020-03-19  SWING_LOW_AT_LOWER        price=28.87, lower_band=29.24 -- becomes pending reference low
+  2020-04-28  ROUND_TRIP_UP             bar_high=34.57 touched upper_band=34.23; round-trip complete for pending low $28.87
+  2020-04-29  SWING_HIGH_AT_UPPER       price=34.71, upper_band=34.50 -- becomes pending reference high
+  2020-07-09  SWING_HIGH_AT_UPPER       price=40.39, upper_band=39.83 -- becomes pending reference high
+  2020-09-10  SWING_LOW_AT_LOWER        price=37.03, lower_band=37.15 -- becomes pending reference low
+  2020-09-10  ROUND_TRIP_DOWN           bar_low=37.03 touched lower_band=37.15; round-trip complete for pending high $40.39
+  2020-09-25  SWING_LOW_AT_LOWER        price=35.38, lower_band=35.81 -- becomes pending reference low
+  2020-10-12  SWING_HIGH_AT_UPPER       price=39.08, upper_band=38.83 -- becomes pending reference high
+  2020-10-12  ROUND_TRIP_UP             bar_high=39.08 touched upper_band=38.83; round-trip complete for pending low $35.38
+  2020-11-09  SWING_HIGH_AT_UPPER       price=43.48, upper_band=42.13 -- becomes pending reference high
+  2020-12-08  ROUND_TRIP_DOWN           bar_low=40.76 touched lower_band=40.87; round-trip complete for pending high $43.48
+  2020-12-09  SWING_LOW_AT_LOWER        price=40.32, lower_band=40.66 -- becomes pending reference low
+  2020-12-31  ROUND_TRIP_UP             bar_high=41.80 touched upper_band=41.63; round-trip complete for pending low $40.32
+  2021-02-17  SWING_HIGH_AT_UPPER       price=48.68, upper_band=48.66 -- becomes pending reference high
+  2021-02-26  ROUND_TRIP_DOWN           bar_low=43.45 touched lower_band=43.63; round-trip complete for pending high $48.68
+  2021-03-24  *** BEAR CONFIRMED ***    close=40.27 broke below reference low $40.32 (was BULL)
+  2021-03-25  SWING_LOW_AT_LOWER        price=40.25, lower_band=40.62 -- becomes pending reference low
+  2021-04-23  SWING_HIGH_AT_UPPER       price=42.58, upper_band=42.53 -- becomes pending reference high
+  2021-04-23  ROUND_TRIP_UP             bar_high=42.58 touched upper_band=42.53; round-trip complete for pending low $40.25
+  2021-05-03  ROUND_TRIP_DOWN           bar_low=40.99 touched lower_band=41.07; round-trip complete for pending high $42.58
+  2021-05-13  SWING_LOW_AT_LOWER        price=38.75, lower_band=39.22 -- becomes pending reference low
+  2021-06-01  SWING_HIGH_AT_UPPER       price=42.48, upper_band=42.20 -- becomes pending reference high
+  2021-06-01  ROUND_TRIP_UP             bar_high=42.48 touched upper_band=42.20; round-trip complete for pending low $38.75
+  2021-07-06  ROUND_TRIP_DOWN           bar_low=39.54 touched lower_band=39.82; round-trip complete for pending high $42.48
+  2021-07-08  SWING_LOW_AT_LOWER        price=38.26, lower_band=39.06 -- becomes pending reference low
+  2021-07-27  SWING_LOW_AT_LOWER        price=34.25, lower_band=36.21 -- becomes pending reference low
+  2021-08-20  SWING_LOW_AT_LOWER        price=34.43, lower_band=34.72 -- becomes pending reference low
+  2021-09-20  SWING_LOW_AT_LOWER        price=33.91, lower_band=34.59 -- becomes pending reference low
+  2021-10-15  ROUND_TRIP_UP             bar_high=36.61 touched upper_band=36.58; round-trip complete for pending low $33.91
+  2021-12-03  SWING_LOW_AT_LOWER        price=33.25, lower_band=33.38 -- becomes pending reference low
+  2021-12-20  SWING_LOW_AT_LOWER        price=32.05, lower_band=32.43 -- becomes pending reference low
+  2022-01-11  ROUND_TRIP_UP             bar_high=34.27 touched upper_band=34.17; round-trip complete for pending low $32.05
+  2022-01-20  SWING_HIGH_AT_UPPER       price=36.03, upper_band=35.31 -- becomes pending reference high
+  2022-02-22  ROUND_TRIP_DOWN           bar_low=32.24 touched lower_band=32.59; round-trip complete for pending high $36.03
+  2022-03-15  SWING_LOW_AT_LOWER        price=23.67, lower_band=24.37 -- becomes pending reference low
+  2022-04-25  SWING_LOW_AT_LOWER        price=25.83, lower_band=26.20 -- becomes pending reference low
+  2022-05-31  ROUND_TRIP_UP             bar_high=29.35 touched upper_band=29.14; round-trip complete for pending low $25.83
+  2022-06-08  SWING_HIGH_AT_UPPER       price=31.07, upper_band=30.74 -- becomes pending reference high
+  2022-06-28  SWING_HIGH_AT_UPPER       price=31.68, upper_band=31.31 -- becomes pending reference high
+  2022-07-13  ROUND_TRIP_DOWN           bar_low=28.48 touched lower_band=28.53; round-trip complete for pending high $31.68
+  2022-07-15  SWING_LOW_AT_LOWER        price=27.67, lower_band=28.07 -- becomes pending reference low
+  2022-08-02  SWING_LOW_AT_LOWER        price=26.63, lower_band=26.89 -- becomes pending reference low
+  2022-08-10  SWING_LOW_AT_LOWER        price=26.49, lower_band=26.50 -- becomes pending reference low
+  2022-08-24  SWING_LOW_AT_LOWER        price=26.25, lower_band=26.26 -- becomes pending reference low
+  2022-08-25  ROUND_TRIP_UP             bar_high=28.16 touched upper_band=27.98; round-trip complete for pending low $26.25
+  2022-08-26  SWING_HIGH_AT_UPPER       price=28.85, upper_band=28.04 -- becomes pending reference high
+  2022-09-06  ROUND_TRIP_DOWN           bar_low=26.07 touched lower_band=26.08; round-trip complete for pending high $28.85
+  2022-11-15  SWING_HIGH_AT_UPPER       price=24.68, upper_band=24.00 -- becomes pending reference high
+  2023-02-06  ROUND_TRIP_DOWN           bar_low=28.08 touched lower_band=28.32; round-trip complete for pending high $24.68
+  2023-02-06  *** BULL CONFIRMED ***    close=28.44 broke above reference high $24.68 (was BEAR)
+  2023-02-24  SWING_LOW_AT_LOWER        price=25.78, lower_band=25.93 -- becomes pending reference low
+  2023-04-25  SWING_LOW_AT_LOWER        price=25.34, lower_band=25.86 -- becomes pending reference low
+  2023-05-31  SWING_LOW_AT_LOWER        price=23.70, lower_band=24.10 -- becomes pending reference low
+  2023-07-25  ROUND_TRIP_UP             bar_high=27.13 touched upper_band=26.87; round-trip complete for pending low $23.70
+  2023-07-31  SWING_HIGH_AT_UPPER       price=28.53, upper_band=28.02 -- becomes pending reference high
+  2023-08-16  ROUND_TRIP_DOWN           bar_low=24.85 touched lower_band=24.90; round-trip complete for pending high $28.53
+  2023-08-21  SWING_LOW_AT_LOWER        price=24.14, lower_band=24.18 -- becomes pending reference low
+  2023-10-05  SWING_LOW_AT_LOWER        price=23.80, lower_band=23.85 -- becomes pending reference low
+  2023-10-23  SWING_LOW_AT_LOWER        price=23.21, lower_band=23.42 -- becomes pending reference low
+  2023-11-14  ROUND_TRIP_UP             bar_high=24.90 touched upper_band=24.88; round-trip complete for pending low $23.21
+  2023-11-15  SWING_HIGH_AT_UPPER       price=25.61, upper_band=25.13 -- becomes pending reference high
+  2023-11-29  ROUND_TRIP_DOWN           bar_low=23.39 touched lower_band=23.51; round-trip complete for pending high $25.61
+  2023-12-04  *** BEAR CONFIRMED ***    close=22.71 broke below reference low $23.21 (was BULL)
+  2024-01-22  SWING_LOW_AT_LOWER        price=19.99, lower_band=20.21 -- becomes pending reference low
+  2024-02-21  ROUND_TRIP_UP             bar_high=22.73 touched upper_band=22.56; round-trip complete for pending low $19.99
+  2024-03-13  SWING_HIGH_AT_UPPER       price=23.85, upper_band=23.70 -- becomes pending reference high
+  2024-04-11  SWING_HIGH_AT_UPPER       price=23.78, upper_band=23.74 -- becomes pending reference high
+  2024-06-27  SWING_LOW_AT_LOWER        price=24.86, lower_band=24.97 -- becomes pending reference low
+  2024-06-27  ROUND_TRIP_DOWN           bar_low=24.86 touched lower_band=24.97; round-trip complete for pending high $23.78
+  2024-06-27  *** BULL CONFIRMED ***    close=24.88 broke above reference high $23.78 (was BEAR)
+  2024-07-12  SWING_HIGH_AT_UPPER       price=26.53, upper_band=26.09 -- becomes pending reference high
+  2024-07-25  ROUND_TRIP_DOWN           bar_low=24.39 touched lower_band=24.40; round-trip complete for pending high $26.53
+  2024-08-05  SWING_LOW_AT_LOWER        price=23.63, lower_band=23.78 -- becomes pending reference low
+  2024-08-16  ROUND_TRIP_UP             bar_high=25.38 touched upper_band=25.34; round-trip complete for pending low $23.63
+  2024-08-19  SWING_HIGH_AT_UPPER       price=25.70, upper_band=25.41 -- becomes pending reference high
+  2024-11-07  SWING_HIGH_AT_UPPER       price=32.31, upper_band=31.99 -- becomes pending reference high
+  2024-11-12  ROUND_TRIP_DOWN           bar_low=29.03 touched lower_band=29.36; round-trip complete for pending high $32.31
+  2024-11-14  SWING_LOW_AT_LOWER        price=28.69, lower_band=28.93 -- becomes pending reference low
+  2024-12-09  SWING_HIGH_AT_UPPER       price=32.44, upper_band=30.80 -- becomes pending reference high
+  2024-12-09  ROUND_TRIP_UP             bar_high=32.44 touched upper_band=30.80; round-trip complete for pending low $28.69
+  2025-01-08  ROUND_TRIP_DOWN           bar_low=28.52 touched lower_band=28.74; round-trip complete for pending high $32.44
+  2025-01-10  SWING_LOW_AT_LOWER        price=27.93, lower_band=28.40 -- becomes pending reference low
+  2025-01-22  SWING_LOW_AT_LOWER        price=27.71, lower_band=28.04 -- becomes pending reference low
+  2025-01-28  ROUND_TRIP_UP             bar_high=31.18 touched upper_band=31.16; round-trip complete for pending low $27.71
+  2025-01-30  SWING_HIGH_AT_UPPER       price=32.04, upper_band=31.69 -- becomes pending reference high
+  2025-04-04  ROUND_TRIP_DOWN           bar_low=31.31 touched lower_band=33.03; round-trip complete for pending high $32.04
+  2025-04-08  SWING_LOW_AT_LOWER        price=28.49, lower_band=30.19 -- becomes pending reference low
+  2025-05-12  ROUND_TRIP_UP             bar_high=35.23 touched upper_band=35.08; round-trip complete for pending low $28.49
+  2025-06-11  SWING_HIGH_AT_UPPER       price=36.70, upper_band=36.47 -- becomes pending reference high
+  2025-07-24  SWING_HIGH_AT_UPPER       price=38.72, upper_band=38.66 -- becomes pending reference high
+  2025-08-25  SWING_HIGH_AT_UPPER       price=39.15, upper_band=38.93 -- becomes pending reference high
+  2025-09-17  SWING_HIGH_AT_UPPER       price=41.28, upper_band=41.02 -- becomes pending reference high
+  2025-10-10  SWING_LOW_AT_LOWER        price=37.71, lower_band=38.96 -- becomes pending reference low
+  2025-10-10  ROUND_TRIP_DOWN           bar_low=37.71 touched lower_band=38.96; round-trip complete for pending high $41.28
+  2025-11-21  SWING_LOW_AT_LOWER        price=37.74, lower_band=38.12 -- becomes pending reference low
+  2025-12-16  SWING_LOW_AT_LOWER        price=37.68, lower_band=38.00 -- becomes pending reference low
+  2026-01-02  ROUND_TRIP_UP             bar_high=39.86 touched upper_band=39.55; round-trip complete for pending low $37.68
+  2026-01-12  SWING_HIGH_AT_UPPER       price=40.66, upper_band=40.38 -- becomes pending reference high
+  2026-01-29  SWING_HIGH_AT_UPPER       price=41.17, upper_band=40.91 -- becomes pending reference high
+  2026-02-03  ROUND_TRIP_DOWN           bar_low=38.39 touched lower_band=38.54; round-trip complete for pending high $41.17
+  2026-02-04  SWING_LOW_AT_LOWER        price=38.08, lower_band=38.31 -- becomes pending reference low
+  2026-03-03  SWING_LOW_AT_LOWER        price=35.33, lower_band=36.62 -- becomes pending reference low
+  2026-04-16  ROUND_TRIP_UP             bar_high=37.45 touched upper_band=37.25; round-trip complete for pending low $35.33
+  2026-04-17  SWING_HIGH_AT_UPPER       price=37.88, upper_band=37.52 -- becomes pending reference high
+  2026-05-13  SWING_HIGH_AT_UPPER       price=38.35, upper_band=38.08 -- becomes pending reference high
+  2026-05-21  ROUND_TRIP_DOWN           bar_low=35.45 touched lower_band=35.58; round-trip complete for pending high $38.35

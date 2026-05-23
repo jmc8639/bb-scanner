@@ -9,6 +9,11 @@ Implements the strategy described in the project instructions:
   - Multi-timeframe alignment: monthly + weekly + daily
 
 Runs on GitHub Actions. Writes a text report to reports/YYYY-MM-DD.txt.
+
+DIAGNOSTIC MODE:
+  Set DIAGNOSTIC_TICKER in the environment (or hardcode below) to dump the
+  per-bar reasoning for a specific ticker. Output goes to
+  reports/diagnostic_TICKER.txt.
 """
 
 import os
@@ -32,6 +37,7 @@ SWING_N = 5  # bars before/after for swing detection
 TICKER_FILE = "tickers.txt"
 REPORTS_DIR = "reports"
 HISTORY_YEARS = 20  # download up to 20 years of daily data
+DIAGNOSTIC_TICKER = os.environ.get("DIAGNOSTIC_TICKER", "").strip().upper()
 
 
 # -----------------------------------------------------------------------------
@@ -83,7 +89,7 @@ def find_swing_lows_at_lower(df: pd.DataFrame, n: int = SWING_N) -> list:
 # -----------------------------------------------------------------------------
 # BULL / BEAR CLASSIFICATION (FULL ROUND-TRIP STATE MACHINE)
 # -----------------------------------------------------------------------------
-def classify(df: pd.DataFrame) -> dict:
+def classify(df: pd.DataFrame, diagnostic: bool = False) -> dict:
     """
     Walk through the dataframe chronologically and classify the current state.
     Returns: {
@@ -91,7 +97,8 @@ def classify(df: pd.DataFrame) -> dict:
         "confirmed_date": pd.Timestamp or None,
         "confirmed_price": float or None,
         "reference_level": float or None,
-        "history": list of (date, "BULL"/"BEAR", price) events
+        "history": list of (date, "BULL"/"BEAR", price) events,
+        "trace": list of diagnostic events (only if diagnostic=True)
     }
     """
     df = df.copy()
@@ -104,6 +111,7 @@ def classify(df: pd.DataFrame) -> dict:
             "confirmed_price": None,
             "reference_level": None,
             "history": [],
+            "trace": [],
             "reason": "insufficient data",
         }
 
@@ -117,24 +125,18 @@ def classify(df: pd.DataFrame) -> dict:
         events.append((idx, "LOW", price))
     events.sort(key=lambda e: e[0])
 
-    # State machine
-    # We track:
-    #   pending_ref_high: most recent unbroken upper-band swing high (potential bull reference)
-    #   pending_ref_low: most recent unbroken lower-band swing low (potential bear reference)
-    #   has_visited_opposite: whether price has touched the opposite band since the pending ref was set
-    #   current_state: BULL / BEAR / NEUTRAL
     state = "NEUTRAL"
     confirmed_date = None
     confirmed_price = None
     reference_level = None
     history = []
+    trace = []
 
-    pending_high = None  # (date, price) - waiting for round-trip then break above
-    pending_low = None  # (date, price) - waiting for round-trip then break below
+    pending_high = None  # (date, price)
+    pending_low = None
     high_round_tripped = False
     low_round_tripped = False
 
-    # Iterate bar by bar; check for swing events and confirmation breakouts
     event_iter = iter(events)
     next_event = next(event_iter, None)
 
@@ -150,48 +152,66 @@ def classify(df: pd.DataFrame) -> dict:
         while next_event is not None and next_event[0] == date:
             ev_date, ev_type, ev_price = next_event
             if ev_type == "HIGH":
-                # Update pending high to most recent
                 pending_high = (ev_date, ev_price)
                 high_round_tripped = False
-            else:  # LOW
+                if diagnostic:
+                    trace.append((date, "SWING_HIGH_AT_UPPER",
+                                  f"price={ev_price:.2f}, upper_band={upper:.2f} -- becomes pending reference high"))
+            else:
                 pending_low = (ev_date, ev_price)
                 low_round_tripped = False
+                if diagnostic:
+                    trace.append((date, "SWING_LOW_AT_LOWER",
+                                  f"price={ev_price:.2f}, lower_band={lower:.2f} -- becomes pending reference low"))
             next_event = next(event_iter, None)
 
-        # Track round-trip: did this bar touch the opposite band?
-        if pending_high is not None and bar_low <= lower:
+        # Track round-trip
+        if pending_high is not None and bar_low <= lower and not high_round_tripped:
             high_round_tripped = True
-        if pending_low is not None and bar_high >= upper:
+            if diagnostic:
+                trace.append((date, "ROUND_TRIP_DOWN",
+                              f"bar_low={bar_low:.2f} touched lower_band={lower:.2f}; round-trip complete for pending high ${pending_high[1]:.2f}"))
+        if pending_low is not None and bar_high >= upper and not low_round_tripped:
             low_round_tripped = True
+            if diagnostic:
+                trace.append((date, "ROUND_TRIP_UP",
+                              f"bar_high={bar_high:.2f} touched upper_band={upper:.2f}; round-trip complete for pending low ${pending_low[1]:.2f}"))
 
-        # Bull confirmation: break above pending high after round-trip
+        # Bull confirmation
         if (
             pending_high is not None
             and high_round_tripped
             and bar_close > pending_high[1]
             and state != "BULL"
         ):
+            prior_state = state
             state = "BULL"
             confirmed_date = date
             confirmed_price = pending_high[1]
             reference_level = pending_high[1]
             history.append((date, "BULL", pending_high[1]))
-            # Reset bear tracking
+            if diagnostic:
+                trace.append((date, "*** BULL CONFIRMED ***",
+                              f"close={bar_close:.2f} broke above reference high ${pending_high[1]:.2f} (was {prior_state})"))
             pending_low = None
             low_round_tripped = False
 
-        # Bear confirmation: break below pending low after round-trip
+        # Bear confirmation
         if (
             pending_low is not None
             and low_round_tripped
             and bar_close < pending_low[1]
             and state != "BEAR"
         ):
+            prior_state = state
             state = "BEAR"
             confirmed_date = date
             confirmed_price = pending_low[1]
             reference_level = pending_low[1]
             history.append((date, "BEAR", pending_low[1]))
+            if diagnostic:
+                trace.append((date, "*** BEAR CONFIRMED ***",
+                              f"close={bar_close:.2f} broke below reference low ${pending_low[1]:.2f} (was {prior_state})"))
             pending_high = None
             high_round_tripped = False
 
@@ -201,6 +221,7 @@ def classify(df: pd.DataFrame) -> dict:
         "confirmed_price": confirmed_price,
         "reference_level": reference_level,
         "history": history,
+        "trace": trace,
     }
 
 
@@ -521,6 +542,52 @@ def main():
         import traceback
         report_path.write_text(f"Report generation failed: {e}\n\n{traceback.format_exc()}")
         print(f"Report formatting failed: {e}")
+
+    # ------------------------------------------------------------------
+    # OPTIONAL DIAGNOSTIC DUMP
+    # ------------------------------------------------------------------
+    if DIAGNOSTIC_TICKER:
+        print(f"\n--- DIAGNOSTIC DUMP for {DIAGNOSTIC_TICKER} ---")
+        try:
+            daily = yf.download(DIAGNOSTIC_TICKER, period=f"{HISTORY_YEARS}y", interval="1d",
+                                auto_adjust=True, progress=False, threads=False)
+            if isinstance(daily.columns, pd.MultiIndex):
+                daily.columns = daily.columns.get_level_values(0)
+            daily.index = pd.to_datetime(daily.index)
+            if daily.index.tz is not None:
+                daily.index = daily.index.tz_localize(None)
+            weekly = resample_to_weekly(daily)
+            monthly = resample_to_monthly(daily)
+
+            diag_lines = [
+                "=" * 78,
+                f"DIAGNOSTIC TRACE for {DIAGNOSTIC_TICKER}",
+                f"History: {daily.index[0].date()} to {daily.index[-1].date()} ({len(daily)} daily bars)",
+                "=" * 78,
+            ]
+            for label, frame in [("MONTHLY", monthly), ("WEEKLY", weekly), ("DAILY", daily)]:
+                diag_lines.append("")
+                diag_lines.append(f"--- {label} TIMEFRAME ---")
+                diag_lines.append(f"Bars: {len(frame)}")
+                result = classify(frame, diagnostic=True)
+                diag_lines.append(f"Final state: {result['state']}")
+                if result['confirmed_date'] is not None:
+                    diag_lines.append(f"Last confirmation: {result['confirmed_date'].date()} at ${result['confirmed_price']:.2f}")
+                diag_lines.append(f"Number of state changes in history: {len(result['history'])}")
+                diag_lines.append("")
+                diag_lines.append("Full event trace (chronological):")
+                if not result['trace']:
+                    diag_lines.append("  (no events)")
+                for ev_date, ev_type, ev_detail in result['trace']:
+                    diag_lines.append(f"  {ev_date.date()}  {ev_type:<25} {ev_detail}")
+
+            diag_path = Path(REPORTS_DIR) / f"diagnostic_{DIAGNOSTIC_TICKER}.txt"
+            diag_path.write_text("\n".join(diag_lines))
+            print(f"Diagnostic dump written to {diag_path}")
+        except Exception as e:
+            import traceback
+            print(f"Diagnostic dump failed: {e}")
+            print(traceback.format_exc())
 
     # Exit cleanly so the commit step still runs
     sys.exit(0)

@@ -4,8 +4,13 @@ name: Daily Scan
 on:
   schedule:
     - cron: "0 22 * * 1-5"
-  # Also allow manual triggering via the Actions tab
+  # Allow manual triggering via the Actions tab, with optional diagnostic ticker
   workflow_dispatch:
+    inputs:
+      diagnostic_ticker:
+        description: "Optional: ticker to produce a detailed diagnostic dump for (e.g., FXI)"
+        required: false
+        default: ""
 
 jobs:
   scan:
@@ -29,6 +34,8 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run the scanner
+        env:
+          DIAGNOSTIC_TICKER: ${{ inputs.diagnostic_ticker }}
         run: python scanner.py
 
       - name: Commit the report
@@ -36,6 +43,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add reports/
-          # Only commit if there are changes
           git diff --cached --quiet || git commit -m "Daily scan report $(date -u +%Y-%m-%d)"
           git push

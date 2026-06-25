@@ -1,0 +1,124 @@
+==============================================================================
+BOLLINGER BAND MULTI-TIMEFRAME SCAN
+Run date: 2026-06-25
+Tickers scanned: 36
+==============================================================================
+
+ACTIONABLE SETUPS
+------------------------------------------------------------------------------
+
+TICKER:  BABA
+SIGNAL:  HIGHEST BUY
+REASON:  Monthly BULL + Weekly lower BB + Daily lower BB
+  Monthly: BULL     (confirmed 2019-01-31 at 103.39)
+  Weekly:  BEAR     (confirmed 2022-10-14 at 73.41)
+  Daily:   BEAR     (confirmed 2026-02-27 at 145.41)
+  Last close: $95.07 on 2026-06-25
+
+TICKER:  FXI
+SIGNAL:  HIGHEST BUY
+REASON:  Monthly BULL + Weekly lower BB + Daily lower BB
+  Monthly: BULL     (confirmed 2015-02-28 at 32.71)
+  Weekly:  BULL     (confirmed 2014-07-25 at 28.86)
+  Daily:   BEAR     (confirmed 2026-05-27 at 35.07)
+  Last close: $31.68 on 2026-06-25
+
+TICKER:  MSTR
+SIGNAL:  HIGHEST BUY
+REASON:  Monthly BULL + Weekly lower BB + Daily lower BB
+  Monthly: BULL     (confirmed 2015-04-30 at 17.86)
+  Weekly:  BEAR     (confirmed 2025-11-14 at 231.51)
+  Daily:   BULL     (confirmed 2026-04-17 at 152.27)
+  Last close: $85.33 on 2026-06-25
+
+TICKER:  GOOGL
+SIGNAL:  VERY STRONG BUY
+REASON:  Monthly BULL + Weekly BULL + Daily lower BB
+  Monthly: BULL     (confirmed 2022-11-30 at 64.28)
+  Weekly:  BULL     (confirmed 2026-04-17 at 328.19)
+  Daily:   BULL     (confirmed 2025-07-14 at 180.59)
+  Last close: $343.71 on 2026-06-25
+
+TICKER:  AAPL
+SIGNAL:  VERY STRONG BUY
+REASON:  Monthly BULL + Weekly BULL + Daily lower BB
+  Monthly: BULL     (confirmed 2023-06-30 at 178.85)
+  Weekly:  BULL     (confirmed 2020-03-20 at 52.95)
+  Daily:   BULL     (confirmed 2025-08-07 at 215.38)
+  Last close: $275.15 on 2026-06-25
+
+TICKER:  NFLX
+SIGNAL:  STRONG BUY
+REASON:  Monthly BULL + Weekly lower BB
+  Monthly: BULL     (confirmed 2020-06-30 at 42.32)
+  Weekly:  BULL     (confirmed 2023-12-22 at 48.50)
+  Daily:   BEAR     (confirmed 2025-10-22 at 113.40)
+  Last close: $70.90 on 2026-06-25
+
+
+WATCH LIST (partial alignment, awaiting band touch)
+------------------------------------------------------------------------------
+  AMD      WATCH BUY    Monthly + Weekly BULL (waiting for daily pullback)
+  META     WATCH BUY    Monthly + Weekly BULL (waiting for daily pullback)
+  AMZN     WATCH BUY    All timeframes BULL aligned (waiting for pullback)
+  QQQ      WATCH BUY    Monthly + Weekly BULL (waiting for daily pullback)
+  DIA      WATCH BUY    Monthly + Weekly BULL (waiting for daily pullback)
+  IWM      WATCH BUY    All timeframes BULL aligned (waiting for pullback)
+  SPY      WATCH BUY    All timeframes BULL aligned (waiting for pullback)
+  XLB      WATCH BUY    Monthly + Weekly BULL (waiting for daily pullback)
+  XLE      WATCH BUY    All timeframes BULL aligned (waiting for pullback)
+  XLI      WATCH BUY    All timeframes BULL aligned (waiting for pullback)
+  XLK      WATCH BUY    Monthly + Weekly BULL (waiting for daily pullback)
+  XLP      WATCH BUY    Monthly + Weekly BULL (waiting for daily pullback)
+  XLRE     WATCH BUY    All timeframes BULL aligned (waiting for pullback)
+  XLU      WATCH BUY    All timeframes BULL aligned (waiting for pullback)
+  GDX      WATCH BUY    All timeframes BULL aligned (waiting for pullback)
+  SIL      WATCH BUY    All timeframes BULL aligned (waiting for pullback)
+  EWZ      WATCH BUY    All timeframes BULL aligned (waiting for pullback)
+  EEM      WATCH BUY    All timeframes BULL aligned (waiting for pullback)
+
+
+FULL CLASSIFICATION TABLE
+------------------------------------------------------------------------------
+Ticker   Monthly    Weekly     Daily      Last Close  
+------------------------------------------------------------------------------
+UBER     NEUTRAL    BULL       BEAR       $72.25      
+SOFI     NEUTRAL    BULL       BEAR       $17.30      
+RIVN     NEUTRAL    NEUTRAL    BEAR       $14.86      
+PLTR     NEUTRAL    NEUTRAL    BEAR       $107.27     
+COIN     NEUTRAL    BULL       BEAR       $142.52     
+BABA     BULL       BEAR       BEAR       $95.07      
+AMD      BULL       BULL       BEAR       $532.57     
+NFLX     BULL       BULL       BEAR       $70.90      
+MSFT     BULL       BEAR       BEAR       $352.83     
+GOOGL    BULL       BULL       BULL       $343.71     
+META     BULL       BULL       BEAR       $542.87     
+TSLA     BULL       BEAR       BEAR       $375.12     
+NVDA     NEUTRAL    BULL       BULL       $195.74     
+AMZN     BULL       BULL       BULL       $227.01     
+AAPL     BULL       BULL       BULL       $275.15     
+QQQ      BULL       BULL       BEAR       $716.38     
+DIA      BULL       BULL       BEAR       $519.26     
+IWM      BULL       BULL       BULL       $298.91     
+SPY      BULL       BULL       BULL       $734.30     
+XLB      BULL       BULL       BEAR       $51.84      
+XLC      NEUTRAL    BULL       BEAR       $105.58     
+XLE      BULL       BULL       BULL       $54.09      
+XLF      BULL       BEAR       BEAR       $53.45      
+XLI      BULL       BULL       BULL       $184.12     
+XLK      BULL       BULL       BEAR       $184.57     
+XLP      BULL       BULL       BEAR       $83.94      
+XLRE     BULL       BULL       BULL       $44.59      
+XLU      BULL       BULL       BULL       $45.85      
+GDX      BULL       BULL       BULL       $75.67      
+GDXJ     BULL       BEAR       BEAR       $97.90      
+SIL      BULL       BULL       BULL       $77.09      
+FXI      BULL       BULL       BEAR       $31.68      
+EWZ      BULL       BULL       BULL       $34.18      
+EEM      BULL       BULL       BULL       $67.96      
+BTC-USD  NEUTRAL    BULL       BULL       $60044.06   
+MSTR     BULL       BEAR       BULL       $85.33      
+
+==============================================================================
+END OF REPORT
+==============================================================================

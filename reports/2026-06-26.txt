@@ -1,0 +1,132 @@
+==============================================================================
+BOLLINGER BAND MULTI-TIMEFRAME SCAN
+Run date: 2026-06-26
+Tickers scanned: 36
+==============================================================================
+
+ACTIONABLE SETUPS
+------------------------------------------------------------------------------
+
+TICKER:  BABA
+SIGNAL:  HIGHEST BUY
+REASON:  Monthly BULL + Weekly lower BB + Daily lower BB
+  Monthly: BULL     (confirmed 2019-01-31 at 103.39)
+  Weekly:  BEAR     (confirmed 2022-10-14 at 73.41)
+  Daily:   BEAR     (confirmed 2026-02-27 at 145.41)
+  Last close: $94.81 on 2026-06-26
+
+TICKER:  FXI
+SIGNAL:  HIGHEST BUY
+REASON:  Monthly BULL + Weekly lower BB + Daily lower BB
+  Monthly: BULL     (confirmed 2015-02-28 at 32.71)
+  Weekly:  BULL     (confirmed 2014-07-25 at 28.86)
+  Daily:   BEAR     (confirmed 2026-05-27 at 35.07)
+  Last close: $31.59 on 2026-06-26
+
+TICKER:  GOOGL
+SIGNAL:  VERY STRONG BUY
+REASON:  Monthly BULL + Weekly BULL + Daily lower BB
+  Monthly: BULL     (confirmed 2022-11-30 at 64.28)
+  Weekly:  BULL     (confirmed 2026-04-17 at 328.19)
+  Daily:   BULL     (confirmed 2025-07-14 at 180.59)
+  Last close: $337.39 on 2026-06-26
+
+TICKER:  AAPL
+SIGNAL:  VERY STRONG BUY
+REASON:  Monthly BULL + Weekly BULL + Daily lower BB
+  Monthly: BULL     (confirmed 2023-06-30 at 178.85)
+  Weekly:  BULL     (confirmed 2020-03-20 at 52.95)
+  Daily:   BULL     (confirmed 2025-08-07 at 215.38)
+  Last close: $283.78 on 2026-06-26
+
+TICKER:  NFLX
+SIGNAL:  STRONG BUY
+REASON:  Monthly BULL + Weekly lower BB
+  Monthly: BULL     (confirmed 2020-06-30 at 42.32)
+  Weekly:  BULL     (confirmed 2023-12-22 at 48.50)
+  Daily:   BEAR     (confirmed 2025-10-22 at 113.40)
+  Last close: $73.81 on 2026-06-26
+
+TICKER:  MSFT
+SIGNAL:  STRONG BUY
+REASON:  Monthly BULL + Weekly lower BB
+  Monthly: BULL     (confirmed 2023-11-30 at 336.83)
+  Weekly:  BEAR     (confirmed 2025-03-28 at 379.61)
+  Daily:   BEAR     (confirmed 2026-06-10 at 400.01)
+  Last close: $372.97 on 2026-06-26
+
+TICKER:  MSTR
+SIGNAL:  STRONG BUY
+REASON:  Monthly BULL + Weekly lower BB
+  Monthly: BULL     (confirmed 2015-04-30 at 17.86)
+  Weekly:  BEAR     (confirmed 2025-11-14 at 231.51)
+  Daily:   BULL     (confirmed 2026-04-17 at 152.27)
+  Last close: $82.31 on 2026-06-26
+
+
+WATCH LIST (partial alignment, awaiting band touch)
+------------------------------------------------------------------------------
+  AMD      WATCH BUY    Monthly + Weekly BULL (waiting for daily pullback)
+  META     WATCH BUY    Monthly + Weekly BULL (waiting for daily pullback)
+  AMZN     WATCH BUY    All timeframes BULL aligned (waiting for pullback)
+  QQQ      WATCH BUY    Monthly + Weekly BULL (waiting for daily pullback)
+  DIA      WATCH BUY    Monthly + Weekly BULL (waiting for daily pullback)
+  IWM      WATCH BUY    All timeframes BULL aligned (waiting for pullback)
+  SPY      WATCH BUY    All timeframes BULL aligned (waiting for pullback)
+  XLB      WATCH BUY    Monthly + Weekly BULL (waiting for daily pullback)
+  XLE      WATCH BUY    All timeframes BULL aligned (waiting for pullback)
+  XLI      WATCH BUY    All timeframes BULL aligned (waiting for pullback)
+  XLK      WATCH BUY    Monthly + Weekly BULL (waiting for daily pullback)
+  XLP      WATCH BUY    Monthly + Weekly BULL (waiting for daily pullback)
+  XLRE     WATCH BUY    All timeframes BULL aligned (waiting for pullback)
+  XLU      WATCH BUY    All timeframes BULL aligned (waiting for pullback)
+  GDX      WATCH BUY    All timeframes BULL aligned (waiting for pullback)
+  SIL      WATCH BUY    All timeframes BULL aligned (waiting for pullback)
+  EWZ      WATCH BUY    All timeframes BULL aligned (waiting for pullback)
+  EEM      WATCH BUY    All timeframes BULL aligned (waiting for pullback)
+
+
+FULL CLASSIFICATION TABLE
+------------------------------------------------------------------------------
+Ticker   Monthly    Weekly     Daily      Last Close  
+------------------------------------------------------------------------------
+UBER     NEUTRAL    BULL       BEAR       $76.20      
+SOFI     NEUTRAL    BULL       BEAR       $17.88      
+RIVN     NEUTRAL    NEUTRAL    BEAR       $15.63      
+PLTR     NEUTRAL    NEUTRAL    BEAR       $112.93     
+COIN     NEUTRAL    BULL       BEAR       $149.06     
+BABA     BULL       BEAR       BEAR       $94.81      
+AMD      BULL       BULL       BEAR       $521.58     
+NFLX     BULL       BULL       BEAR       $73.81      
+MSFT     BULL       BEAR       BEAR       $372.97     
+GOOGL    BULL       BULL       BULL       $337.39     
+META     BULL       BULL       BEAR       $550.25     
+TSLA     BULL       BEAR       BEAR       $379.71     
+NVDA     NEUTRAL    BULL       BULL       $192.53     
+AMZN     BULL       BULL       BULL       $232.69     
+AAPL     BULL       BULL       BULL       $283.78     
+QQQ      BULL       BULL       BEAR       $706.52     
+DIA      BULL       BULL       BEAR       $517.75     
+IWM      BULL       BULL       BULL       $299.83     
+SPY      BULL       BULL       BULL       $728.99     
+XLB      BULL       BULL       BEAR       $51.60      
+XLC      NEUTRAL    BULL       BEAR       $106.18     
+XLE      BULL       BULL       BULL       $53.84      
+XLF      BULL       BEAR       BEAR       $53.57      
+XLI      BULL       BULL       BULL       $181.20     
+XLK      BULL       BULL       BEAR       $181.11     
+XLP      BULL       BULL       BEAR       $84.71      
+XLRE     BULL       BULL       BULL       $45.24      
+XLU      BULL       BULL       BULL       $46.20      
+GDX      BULL       BULL       BULL       $77.00      
+GDXJ     BULL       BEAR       BEAR       $100.29     
+SIL      BULL       BULL       BULL       $78.42      
+FXI      BULL       BULL       BEAR       $31.59      
+EWZ      BULL       BULL       BULL       $34.67      
+EEM      BULL       BULL       BULL       $67.19      
+BTC-USD  NEUTRAL    BULL       BULL       $59976.00   
+MSTR     BULL       BEAR       BULL       $82.31      
+
+==============================================================================
+END OF REPORT
+==============================================================================

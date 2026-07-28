@@ -1,0 +1,130 @@
+==============================================================================
+BOLLINGER BAND MULTI-TIMEFRAME SCAN
+Run date: 2026-07-28
+Tickers scanned: 36
+==============================================================================
+
+ACTIONABLE SETUPS
+------------------------------------------------------------------------------
+
+TICKER:  TSLA
+SIGNAL:  HIGHEST BUY
+REASON:  Monthly BULL + Weekly lower BB + Daily lower BB
+  Monthly: BULL     (confirmed 2017-03-31 at 17.67)
+  Weekly:  BEAR     (confirmed 2022-05-20 at 233.33)
+  Daily:   BEAR     (confirmed 2025-11-13 at 413.90)
+  Last close: $307.44 on 2026-07-28
+
+TICKER:  AMD
+SIGNAL:  VERY STRONG BUY
+REASON:  Monthly BULL + Weekly BULL + Daily lower BB
+  Monthly: BULL     (confirmed 2016-06-30 at 4.80)
+  Weekly:  BULL     (confirmed 2023-12-15 at 132.83)
+  Daily:   BEAR     (confirmed 2026-02-05 at 197.53)
+  Last close: $454.62 on 2026-07-28
+
+TICKER:  AMZN
+SIGNAL:  VERY STRONG BUY
+REASON:  Monthly BULL + Weekly BULL + Daily lower BB
+  Monthly: BULL     (confirmed 2024-03-31 at 177.61)
+  Weekly:  BULL     (confirmed 2024-11-08 at 201.20)
+  Daily:   BULL     (confirmed 2026-04-08 at 220.47)
+  Last close: $230.86 on 2026-07-28
+
+TICKER:  QQQ
+SIGNAL:  VERY STRONG BUY
+REASON:  Monthly BULL + Weekly BULL + Daily lower BB
+  Monthly: BULL     (confirmed 2022-06-30 at 62.73)
+  Weekly:  BULL     (confirmed 2014-05-30 at 83.00)
+  Daily:   BEAR     (confirmed 2026-02-04 at 605.62)
+  Last close: $675.49 on 2026-07-28
+
+TICKER:  SPY
+SIGNAL:  VERY STRONG BUY
+REASON:  Monthly BULL + Weekly BULL + Daily lower BB
+  Monthly: BULL     (confirmed 2020-08-31 at 309.08)
+  Weekly:  BULL     (confirmed 2012-02-17 at 104.84)
+  Daily:   BULL     (confirmed 2025-10-10 at 639.11)
+  Last close: $740.86 on 2026-07-28
+
+TICKER:  XLK
+SIGNAL:  VERY STRONG BUY
+REASON:  Monthly BULL + Weekly BULL + Daily lower BB
+  Monthly: BULL     (confirmed 2015-08-31 at 13.29)
+  Weekly:  BULL     (confirmed 2014-10-17 at 15.94)
+  Daily:   BEAR     (confirmed 2026-02-04 at 141.27)
+  Last close: $171.09 on 2026-07-28
+
+TICKER:  EEM
+SIGNAL:  VERY STRONG BUY
+REASON:  Monthly BULL + Weekly BULL + Daily lower BB
+  Monthly: BULL     (confirmed 2020-11-30 at 40.35)
+  Weekly:  BULL     (confirmed 2020-10-23 at 40.35)
+  Daily:   BULL     (confirmed 2025-10-20 at 53.64)
+  Last close: $62.36 on 2026-07-28
+
+
+WATCH LIST (partial alignment, awaiting band touch)
+------------------------------------------------------------------------------
+  NFLX     WATCH BUY    Monthly + Weekly BULL (waiting for daily pullback)
+  GOOGL    WATCH BUY    Monthly + Weekly BULL (waiting for daily pullback)
+  META     WATCH BUY    All timeframes BULL aligned (waiting for pullback)
+  AAPL     WATCH BUY    All timeframes BULL aligned (waiting for pullback)
+  DIA      WATCH BUY    All timeframes BULL aligned (waiting for pullback)
+  IWM      WATCH BUY    All timeframes BULL aligned (waiting for pullback)
+  XLB      WATCH BUY    Monthly + Weekly BULL (waiting for daily pullback)
+  XLE      WATCH BUY    All timeframes BULL aligned (waiting for pullback)
+  XLI      WATCH BUY    All timeframes BULL aligned (waiting for pullback)
+  XLP      WATCH BUY    Monthly + Weekly BULL (waiting for daily pullback)
+  XLRE     WATCH BUY    All timeframes BULL aligned (waiting for pullback)
+  XLU      WATCH BUY    All timeframes BULL aligned (waiting for pullback)
+  GDX      WATCH BUY    All timeframes BULL aligned (waiting for pullback)
+  SIL      WATCH BUY    All timeframes BULL aligned (waiting for pullback)
+  FXI      WATCH BUY    Monthly + Weekly BULL (waiting for daily pullback)
+  EWZ      WATCH BUY    All timeframes BULL aligned (waiting for pullback)
+
+
+FULL CLASSIFICATION TABLE
+------------------------------------------------------------------------------
+Ticker   Monthly    Weekly     Daily      Last Close  
+------------------------------------------------------------------------------
+UBER     NEUTRAL    BULL       BEAR       $70.74      
+SOFI     NEUTRAL    BULL       BEAR       $16.74      
+RIVN     NEUTRAL    NEUTRAL    BEAR       $16.69      
+PLTR     NEUTRAL    NEUTRAL    BEAR       $123.53     
+COIN     NEUTRAL    BULL       BEAR       $167.90     
+BABA     BULL       BEAR       BEAR       $115.19     
+AMD      BULL       BULL       BEAR       $454.62     
+NFLX     BULL       BULL       BEAR       $72.39      
+MSFT     BULL       BEAR       BEAR       $393.35     
+GOOGL    BULL       BULL       BEAR       $333.71     
+META     BULL       BULL       BULL       $593.41     
+TSLA     BULL       BEAR       BEAR       $307.44     
+NVDA     NEUTRAL    BULL       BULL       $197.01     
+AMZN     BULL       BULL       BULL       $230.86     
+AAPL     BULL       BULL       BULL       $340.08     
+QQQ      BULL       BULL       BEAR       $675.49     
+DIA      BULL       BULL       BULL       $526.89     
+IWM      BULL       BULL       BULL       $293.37     
+SPY      BULL       BULL       BULL       $740.86     
+XLB      BULL       BULL       BEAR       $52.34      
+XLC      NEUTRAL    BULL       BEAR       $109.67     
+XLE      BULL       BULL       BULL       $57.57      
+XLF      BULL       BEAR       BEAR       $57.60      
+XLI      BULL       BULL       BULL       $182.49     
+XLK      BULL       BULL       BEAR       $171.09     
+XLP      BULL       BULL       BEAR       $87.06      
+XLRE     BULL       BULL       BULL       $46.01      
+XLU      BULL       BULL       BULL       $45.52      
+GDX      BULL       BULL       BULL       $74.21      
+GDXJ     BULL       BEAR       BEAR       $96.78      
+SIL      BULL       BULL       BULL       $73.99      
+FXI      BULL       BULL       BEAR       $35.65      
+EWZ      BULL       BULL       BULL       $36.05      
+EEM      BULL       BULL       BULL       $62.36      
+BTC-USD  NEUTRAL    BULL       BULL       $63635.66   
+MSTR     BULL       BEAR       BULL       $96.16      
+
+==============================================================================
+END OF REPORT
+==============================================================================

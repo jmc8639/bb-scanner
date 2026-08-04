@@ -1,23 +1,23 @@
 name: Daily Scan
 
-# Schedule: run at 22:00 UTC Monday-Friday (5pm ET during DST, 4pm ET in winter — runs after US market close year-round)
+# Runs every weekday at 22:00 UTC (~5pm ET / 6pm ET depending on DST)
 on:
   schedule:
     - cron: "0 22 * * 1-5"
-  # Allow manual triggering via the Actions tab, with optional diagnostic ticker
   workflow_dispatch:
-    inputs:
-      diagnostic_ticker:
-        description: "Optional: ticker to produce a detailed diagnostic dump for (e.g., FXI)"
-        required: false
-        default: ""
+
+# Cancel any in-progress runs when a new one is queued (avoids overlap)
+concurrency:
+  group: daily-scan
+  cancel-in-progress: true
 
 jobs:
   scan:
     runs-on: ubuntu-latest
+    timeout-minutes: 120     # 2-hour hard cap; typical run is 30-60 min
 
     permissions:
-      contents: write  # needed to commit the daily report back to the repo
+      contents: write
 
     steps:
       - name: Check out repository
@@ -34,8 +34,6 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run the scanner
-        env:
-          DIAGNOSTIC_TICKER: ${{ inputs.diagnostic_ticker }}
         run: python scanner.py
 
       - name: Commit the report

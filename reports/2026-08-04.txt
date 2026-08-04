@@ -2,11 +2,13 @@
 SCREENED TICKERS - 2026-08-04
 ============================================================
 Universe:              503
-Passed fundamentals:   174
-Passed all filters:    138
+Passed fundamentals:   197
+Passed all filters:    158
 ============================================================
 
 ABBV
+AMD
+AFL
 A
 ALL
 GOOGL
@@ -14,14 +16,18 @@ GOOG
 AMZN
 AMT
 APH
+ADI
 AAPL
 AMAT
 ANET
+AIZ
 ADSK
 AXON
 BAC
 BRK-B
+BBY
 TECH
+BLK
 BX
 BNY
 BKNG
@@ -31,6 +37,7 @@ BRO
 CHRW
 CDNS
 CASY
+CAT
 COR
 CNP
 CF
@@ -49,6 +56,7 @@ CVS
 DRI
 DVA
 DXCM
+FANG
 DTE
 EIX
 EA
@@ -56,19 +64,24 @@ EME
 EMR
 EQIX
 EVRG
+XOM
 FICO
 FITB
 FSLR
 FLEX
 BEN
+FCX
 GRMN
 GEN
 GNRC
 GILD
 GDDY
+GS
 HIG
+DOC
 HSY
 HON
+HST
 HWM
 HBAN
 HII
@@ -78,15 +91,20 @@ IVZ
 IRM
 JBHT
 JBL
+JPM
 KEYS
+KIM
 KMI
 KKR
 LHX
 LH
 LRCX
+LLY
 LYV
 LMT
+MCK
 MET
+MU
 MSFT
 TAP
 MDLZ
@@ -97,9 +115,11 @@ MS
 NEE
 NKE
 NTRS
+NUE
 NXPI
 ODFL
 OMC
+ON
 OKE
 ORCL
 PAYX
@@ -111,9 +131,11 @@ PSA
 PWR
 RJF
 RTX
+O
 ROK
 ROP
 ROST
+CRM
 STX
 SO
 SWK
@@ -128,7 +150,6 @@ TRGP
 TER
 TXN
 TJX
-TKO
 TRV
 TRMB
 TFC
@@ -136,7 +157,6 @@ TSN
 UDR
 URI
 VLO
-VRTX
 WEC
 WELL
 WY

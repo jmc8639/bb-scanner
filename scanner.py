@@ -31,8 +31,20 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import yfinance as yf
+from io import StringIO
+from urllib.request import Request, urlopen
 
 warnings.filterwarnings("ignore")
+
+# Wikipedia requires a proper User-Agent or it returns 403 Forbidden
+USER_AGENT = "Mozilla/5.0 (compatible; bb-scanner/1.0; +https://github.com)"
+
+
+def fetch_html(url: str) -> str:
+    """Fetch a URL with a proper User-Agent and return the HTML text."""
+    req = Request(url, headers={"User-Agent": USER_AGENT})
+    with urlopen(req, timeout=30) as resp:
+        return resp.read().decode("utf-8", errors="replace")
 
 # =============================================================================
 # CONFIGURATION
@@ -62,9 +74,9 @@ FUNDAMENTAL_SLEEP_MS = 50               # sleep between fundamental fetches
 def get_sp500_tickers() -> list:
     """S&P 500 constituents from Wikipedia."""
     try:
-        tables = pd.read_html("https://en.wikipedia.org/wiki/List_of_S%26P_500_companies")
+        html = fetch_html("https://en.wikipedia.org/wiki/List_of_S%26P_500_companies")
+        tables = pd.read_html(StringIO(html))
         df = tables[0]
-        # Column is "Symbol"
         tickers = df["Symbol"].astype(str).str.replace(".", "-", regex=False).tolist()
         return tickers
     except Exception as e:
@@ -75,15 +87,14 @@ def get_sp500_tickers() -> list:
 def get_nasdaq100_tickers() -> list:
     """NASDAQ 100 constituents from Wikipedia."""
     try:
-        tables = pd.read_html("https://en.wikipedia.org/wiki/Nasdaq-100")
-        # The constituents table may be at various positions; try to find it
+        html = fetch_html("https://en.wikipedia.org/wiki/Nasdaq-100")
+        tables = pd.read_html(StringIO(html))
         for tbl in tables:
             cols = [str(c).lower() for c in tbl.columns]
             if any("ticker" in c or "symbol" in c for c in cols):
                 col = next(c for c in tbl.columns if "ticker" in str(c).lower() or "symbol" in str(c).lower())
                 tickers = tbl[col].astype(str).str.replace(".", "-", regex=False).tolist()
-                # Filter out obvious non-tickers
-                tickers = [t for t in tickers if t.isalpha() or "-" in t]
+                tickers = [t for t in tickers if t.replace("-", "").replace(".", "").isalpha()]
                 if len(tickers) > 50:
                     return tickers
         return []
@@ -93,19 +104,16 @@ def get_nasdaq100_tickers() -> list:
 
 
 def get_russell1000_tickers() -> list:
-    """
-    Russell 1000 constituents. Wikipedia has a list but it's not always current;
-    iShares publishes the actual holdings but requires a specific parser.
-    For robust coverage, we'll try Wikipedia and gracefully degrade.
-    """
+    """Russell 1000 constituents from Wikipedia."""
     try:
-        tables = pd.read_html("https://en.wikipedia.org/wiki/Russell_1000_Index")
+        html = fetch_html("https://en.wikipedia.org/wiki/Russell_1000_Index")
+        tables = pd.read_html(StringIO(html))
         for tbl in tables:
             cols = [str(c).lower() for c in tbl.columns]
             if any("ticker" in c or "symbol" in c for c in cols):
                 col = next(c for c in tbl.columns if "ticker" in str(c).lower() or "symbol" in str(c).lower())
                 tickers = tbl[col].astype(str).str.replace(".", "-", regex=False).tolist()
-                tickers = [t for t in tickers if t.isalpha() or "-" in t]
+                tickers = [t for t in tickers if t.replace("-", "").replace(".", "").isalpha()]
                 if len(tickers) > 500:
                     return tickers
         return []

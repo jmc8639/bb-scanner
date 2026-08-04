@@ -1,23 +1,29 @@
 """
-Bollinger Band Bull/Bear Multi-Timeframe Scanner
-=================================================
+Fundamental + Bollinger Band Multi-Timeframe Screener
+======================================================
 
-Implements the strategy described in the project instructions:
-  - Bollinger Bands: 20-period SMA +/- 2 stdev
-  - Bull confirmed: swing high at upper band -> round-trip to lower band -> breakout above the reference high
-  - Bear confirmed: swing low at lower band -> round-trip to upper band -> breakdown below the reference low
-  - Multi-timeframe alignment: monthly + weekly + daily
+Scans US large/mid-cap equities (S&P 500 + NASDAQ 100 + Russell 1000)
+and outputs the tickers that pass ALL of:
 
-Runs on GitHub Actions. Writes a text report to reports/YYYY-MM-DD.txt.
+  FUNDAMENTAL GATE:
+    - Market cap > $300M
+    - Quarterly EPS diluted growth, YoY > 20%
+    - Average daily volume (60-day) > 200,000
 
-DIAGNOSTIC MODE:
-  Set DIAGNOSTIC_TICKER in the environment (or hardcode below) to dump the
-  per-bar reasoning for a specific ticker. Output goes to
-  reports/diagnostic_TICKER.txt.
+  TECHNICAL GATE (all three must be BULL):
+    - Daily BB round-trip state = BULL
+    - Weekly BB round-trip state = BULL
+    - Monthly BB round-trip state = BULL
+
+Uses "Interpretation B" round-trip logic: the reference high/low is the
+highest/lowest extreme since the last state change (not the most recent).
+
+Output: reports/YYYY-MM-DD.txt containing only the passing ticker symbols.
 """
 
 import os
 import sys
+import time
 import warnings
 from datetime import datetime, timezone
 from pathlib import Path
@@ -28,23 +34,157 @@ import yfinance as yf
 
 warnings.filterwarnings("ignore")
 
-# -----------------------------------------------------------------------------
+# =============================================================================
 # CONFIGURATION
-# -----------------------------------------------------------------------------
+# =============================================================================
 BB_PERIOD = 20
 BB_STDEV = 2.0
-SWING_N = 5  # bars before/after for swing detection
-TICKER_FILE = "tickers.txt"
+SWING_N = 5
+HISTORY_YEARS = 20
+
+# Fundamental thresholds
+MIN_MARKET_CAP = 300_000_000            # $300M
+MIN_EPS_GROWTH_YOY = 0.20               # 20%
+MIN_AVG_VOLUME = 200_000                # 200k shares/day
+AVG_VOLUME_WINDOW = 60                  # 60 trading days for avg volume
+
 REPORTS_DIR = "reports"
-HISTORY_YEARS = 20  # download up to 20 years of daily data
-DIAGNOSTIC_TICKER = os.environ.get("DIAGNOSTIC_TICKER", "").strip().upper()
+
+# Rate limiting: yfinance will block us if we hammer it.
+# 1500+ tickers means we need to be gentle.
+DOWNLOAD_SLEEP_MS = 100                 # sleep between price downloads
+FUNDAMENTAL_SLEEP_MS = 50               # sleep between fundamental fetches
 
 
-# -----------------------------------------------------------------------------
-# BOLLINGER BAND CALCULATION
-# -----------------------------------------------------------------------------
-def add_bollinger_bands(df: pd.DataFrame, period: int = BB_PERIOD, stdev: float = BB_STDEV) -> pd.DataFrame:
-    """Add BB middle, upper, lower columns to an OHLC dataframe."""
+# =============================================================================
+# UNIVERSE: fetch live index constituents from Wikipedia
+# =============================================================================
+def get_sp500_tickers() -> list:
+    """S&P 500 constituents from Wikipedia."""
+    try:
+        tables = pd.read_html("https://en.wikipedia.org/wiki/List_of_S%26P_500_companies")
+        df = tables[0]
+        # Column is "Symbol"
+        tickers = df["Symbol"].astype(str).str.replace(".", "-", regex=False).tolist()
+        return tickers
+    except Exception as e:
+        print(f"  Warning: could not fetch S&P 500 list: {e}")
+        return []
+
+
+def get_nasdaq100_tickers() -> list:
+    """NASDAQ 100 constituents from Wikipedia."""
+    try:
+        tables = pd.read_html("https://en.wikipedia.org/wiki/Nasdaq-100")
+        # The constituents table may be at various positions; try to find it
+        for tbl in tables:
+            cols = [str(c).lower() for c in tbl.columns]
+            if any("ticker" in c or "symbol" in c for c in cols):
+                col = next(c for c in tbl.columns if "ticker" in str(c).lower() or "symbol" in str(c).lower())
+                tickers = tbl[col].astype(str).str.replace(".", "-", regex=False).tolist()
+                # Filter out obvious non-tickers
+                tickers = [t for t in tickers if t.isalpha() or "-" in t]
+                if len(tickers) > 50:
+                    return tickers
+        return []
+    except Exception as e:
+        print(f"  Warning: could not fetch NASDAQ 100 list: {e}")
+        return []
+
+
+def get_russell1000_tickers() -> list:
+    """
+    Russell 1000 constituents. Wikipedia has a list but it's not always current;
+    iShares publishes the actual holdings but requires a specific parser.
+    For robust coverage, we'll try Wikipedia and gracefully degrade.
+    """
+    try:
+        tables = pd.read_html("https://en.wikipedia.org/wiki/Russell_1000_Index")
+        for tbl in tables:
+            cols = [str(c).lower() for c in tbl.columns]
+            if any("ticker" in c or "symbol" in c for c in cols):
+                col = next(c for c in tbl.columns if "ticker" in str(c).lower() or "symbol" in str(c).lower())
+                tickers = tbl[col].astype(str).str.replace(".", "-", regex=False).tolist()
+                tickers = [t for t in tickers if t.isalpha() or "-" in t]
+                if len(tickers) > 500:
+                    return tickers
+        return []
+    except Exception as e:
+        print(f"  Warning: could not fetch Russell 1000 list: {e}")
+        return []
+
+
+def build_universe() -> list:
+    """Combine and deduplicate all index constituents."""
+    print("Fetching index constituents...")
+    sp500 = get_sp500_tickers()
+    print(f"  S&P 500:      {len(sp500)} tickers")
+    ndx = get_nasdaq100_tickers()
+    print(f"  NASDAQ 100:   {len(ndx)} tickers")
+    r1000 = get_russell1000_tickers()
+    print(f"  Russell 1000: {len(r1000)} tickers")
+
+    # Deduplicate while preserving order
+    seen = set()
+    universe = []
+    for t in sp500 + ndx + r1000:
+        t = t.strip().upper()
+        if t and t not in seen:
+            seen.add(t)
+            universe.append(t)
+    print(f"  Deduplicated: {len(universe)} unique tickers\n")
+    return universe
+
+
+# =============================================================================
+# FUNDAMENTAL SCREEN
+# =============================================================================
+def check_fundamentals(symbol: str) -> dict:
+    """
+    Fetch fundamentals via yfinance .info and check the gate.
+    Returns:
+      {"pass": bool, "reason": str, "market_cap": float, "eps_growth": float, "avg_vol": float}
+    """
+    try:
+        info = yf.Ticker(symbol).info
+    except Exception as e:
+        return {"pass": False, "reason": f"info fetch failed: {str(e)[:50]}"}
+
+    if not info or not isinstance(info, dict):
+        return {"pass": False, "reason": "no info returned"}
+
+    market_cap = info.get("marketCap")
+    # earningsQuarterlyGrowth = quarterly EPS growth YoY (fraction, e.g., 0.25 = 25%)
+    eps_growth = info.get("earningsQuarterlyGrowth")
+    avg_vol = info.get("averageDailyVolume10Day") or info.get("averageVolume")
+
+    if market_cap is None:
+        return {"pass": False, "reason": "market cap missing"}
+    if eps_growth is None:
+        return {"pass": False, "reason": "eps growth missing"}
+    if avg_vol is None:
+        return {"pass": False, "reason": "avg volume missing"}
+
+    if market_cap < MIN_MARKET_CAP:
+        return {"pass": False, "reason": f"mkt cap ${market_cap/1e6:.0f}M < $300M"}
+    if eps_growth < MIN_EPS_GROWTH_YOY:
+        return {"pass": False, "reason": f"eps growth {eps_growth*100:.1f}% < 20%"}
+    if avg_vol < MIN_AVG_VOLUME:
+        return {"pass": False, "reason": f"avg vol {avg_vol:,.0f} < 200k"}
+
+    return {
+        "pass": True,
+        "reason": "ok",
+        "market_cap": market_cap,
+        "eps_growth": eps_growth,
+        "avg_vol": avg_vol,
+    }
+
+
+# =============================================================================
+# BOLLINGER BAND CLASSIFICATION (Interpretation B: highest/lowest extreme)
+# =============================================================================
+def add_bollinger_bands(df: pd.DataFrame, period=BB_PERIOD, stdev=BB_STDEV) -> pd.DataFrame:
     df = df.copy()
     df["bb_mid"] = df["Close"].rolling(period).mean()
     df["bb_std"] = df["Close"].rolling(period).std()
@@ -53,86 +193,46 @@ def add_bollinger_bands(df: pd.DataFrame, period: int = BB_PERIOD, stdev: float 
     return df
 
 
-# -----------------------------------------------------------------------------
-# SWING HIGH/LOW DETECTION AT THE BANDS
-# -----------------------------------------------------------------------------
-def find_swing_highs_at_upper(df: pd.DataFrame, n: int = SWING_N) -> list:
-    """Return list of (index, price) tuples for swing highs touching/above the upper band."""
+def find_swing_highs_at_upper(df: pd.DataFrame, n=SWING_N) -> list:
     highs = df["High"].values
     upper = df["bb_upper"].values
     swings = []
     for i in range(n, len(df) - n):
         if np.isnan(upper[i]):
             continue
-        # local high: higher than n bars before and after
-        if highs[i] == max(highs[i - n : i + n + 1]):
-            # must be at or above the upper band
-            if highs[i] >= upper[i]:
-                swings.append((df.index[i], highs[i]))
+        if highs[i] == max(highs[i - n : i + n + 1]) and highs[i] >= upper[i]:
+            swings.append((df.index[i], highs[i]))
     return swings
 
 
-def find_swing_lows_at_lower(df: pd.DataFrame, n: int = SWING_N) -> list:
-    """Return list of (index, price) tuples for swing lows touching/below the lower band."""
+def find_swing_lows_at_lower(df: pd.DataFrame, n=SWING_N) -> list:
     lows = df["Low"].values
     lower = df["bb_lower"].values
     swings = []
     for i in range(n, len(df) - n):
         if np.isnan(lower[i]):
             continue
-        if lows[i] == min(lows[i - n : i + n + 1]):
-            if lows[i] <= lower[i]:
-                swings.append((df.index[i], lows[i]))
+        if lows[i] == min(lows[i - n : i + n + 1]) and lows[i] <= lower[i]:
+            swings.append((df.index[i], lows[i]))
     return swings
 
 
-# -----------------------------------------------------------------------------
-# BULL / BEAR CLASSIFICATION (FULL ROUND-TRIP STATE MACHINE)
-# -----------------------------------------------------------------------------
-def classify(df: pd.DataFrame, diagnostic: bool = False) -> dict:
+def classify(df: pd.DataFrame) -> str:
     """
-    Walk through the dataframe chronologically and classify the current state.
-    Returns: {
-        "state": "BULL" | "BEAR" | "NEUTRAL",
-        "confirmed_date": pd.Timestamp or None,
-        "confirmed_price": float or None,
-        "reference_level": float or None,
-        "history": list of (date, "BULL"/"BEAR", price) events,
-        "trace": list of diagnostic events (only if diagnostic=True)
-    }
+    Interpretation B state machine.
+    Returns "BULL", "BEAR", or "NEUTRAL".
     """
-    df = df.copy()
-    df = add_bollinger_bands(df)
-    df = df.dropna(subset=["bb_upper", "bb_lower"])
+    df = add_bollinger_bands(df).dropna(subset=["bb_upper", "bb_lower"])
     if len(df) < 2 * SWING_N + BB_PERIOD:
-        return {
-            "state": "NEUTRAL",
-            "confirmed_date": None,
-            "confirmed_price": None,
-            "reference_level": None,
-            "history": [],
-            "trace": [],
-            "reason": "insufficient data",
-        }
+        return "NEUTRAL"
 
     swing_highs = find_swing_highs_at_upper(df)
     swing_lows = find_swing_lows_at_lower(df)
-    # Combine and sort all band-touching swing events chronologically
-    events = []
-    for idx, price in swing_highs:
-        events.append((idx, "HIGH", price))
-    for idx, price in swing_lows:
-        events.append((idx, "LOW", price))
+    events = [(d, "HIGH", p) for d, p in swing_highs] + [(d, "LOW", p) for d, p in swing_lows]
     events.sort(key=lambda e: e[0])
 
     state = "NEUTRAL"
-    confirmed_date = None
-    confirmed_price = None
-    reference_level = None
-    history = []
-    trace = []
-
-    pending_high = None  # (date, price)
+    pending_high = None
     pending_low = None
     high_round_tripped = False
     low_round_tripped = False
@@ -142,163 +242,63 @@ def classify(df: pd.DataFrame, diagnostic: bool = False) -> dict:
 
     for i in range(len(df)):
         date = df.index[i]
-        bar_high = df["High"].iloc[i]
         bar_low = df["Low"].iloc[i]
+        bar_high = df["High"].iloc[i]
         bar_close = df["Close"].iloc[i]
         upper = df["bb_upper"].iloc[i]
         lower = df["bb_lower"].iloc[i]
 
-        # Register any swing events on this date
         while next_event is not None and next_event[0] == date:
             ev_date, ev_type, ev_price = next_event
             if ev_type == "HIGH":
-                pending_high = (ev_date, ev_price)
-                high_round_tripped = False
-                if diagnostic:
-                    trace.append((date, "SWING_HIGH_AT_UPPER",
-                                  f"price={ev_price:.2f}, upper_band={upper:.2f} -- becomes pending reference high"))
+                if pending_high is None or ev_price > pending_high[1]:
+                    pending_high = (ev_date, ev_price)
+                    high_round_tripped = False
             else:
-                pending_low = (ev_date, ev_price)
-                low_round_tripped = False
-                if diagnostic:
-                    trace.append((date, "SWING_LOW_AT_LOWER",
-                                  f"price={ev_price:.2f}, lower_band={lower:.2f} -- becomes pending reference low"))
+                if pending_low is None or ev_price < pending_low[1]:
+                    pending_low = (ev_date, ev_price)
+                    low_round_tripped = False
             next_event = next(event_iter, None)
 
-        # Track round-trip
-        if pending_high is not None and bar_low <= lower and not high_round_tripped:
+        if pending_high is not None and bar_low <= lower:
             high_round_tripped = True
-            if diagnostic:
-                trace.append((date, "ROUND_TRIP_DOWN",
-                              f"bar_low={bar_low:.2f} touched lower_band={lower:.2f}; round-trip complete for pending high ${pending_high[1]:.2f}"))
-        if pending_low is not None and bar_high >= upper and not low_round_tripped:
+        if pending_low is not None and bar_high >= upper:
             low_round_tripped = True
-            if diagnostic:
-                trace.append((date, "ROUND_TRIP_UP",
-                              f"bar_high={bar_high:.2f} touched upper_band={upper:.2f}; round-trip complete for pending low ${pending_low[1]:.2f}"))
 
-        # Bull confirmation
-        if (
-            pending_high is not None
-            and high_round_tripped
-            and bar_close > pending_high[1]
-            and state != "BULL"
-        ):
-            prior_state = state
+        if pending_high is not None and high_round_tripped and bar_close > pending_high[1] and state != "BULL":
             state = "BULL"
-            confirmed_date = date
-            confirmed_price = pending_high[1]
-            reference_level = pending_high[1]
-            history.append((date, "BULL", pending_high[1]))
-            if diagnostic:
-                trace.append((date, "*** BULL CONFIRMED ***",
-                              f"close={bar_close:.2f} broke above reference high ${pending_high[1]:.2f} (was {prior_state})"))
             pending_low = None
             low_round_tripped = False
 
-        # Bear confirmation
-        if (
-            pending_low is not None
-            and low_round_tripped
-            and bar_close < pending_low[1]
-            and state != "BEAR"
-        ):
-            prior_state = state
+        if pending_low is not None and low_round_tripped and bar_close < pending_low[1] and state != "BEAR":
             state = "BEAR"
-            confirmed_date = date
-            confirmed_price = pending_low[1]
-            reference_level = pending_low[1]
-            history.append((date, "BEAR", pending_low[1]))
-            if diagnostic:
-                trace.append((date, "*** BEAR CONFIRMED ***",
-                              f"close={bar_close:.2f} broke below reference low ${pending_low[1]:.2f} (was {prior_state})"))
             pending_high = None
             high_round_tripped = False
 
-    return {
-        "state": state,
-        "confirmed_date": confirmed_date,
-        "confirmed_price": confirmed_price,
-        "reference_level": reference_level,
-        "history": history,
-        "trace": trace,
-    }
+    return state
 
 
-# -----------------------------------------------------------------------------
-# CURRENT BAND PROXIMITY
-# -----------------------------------------------------------------------------
-def current_band_position(df: pd.DataFrame) -> dict:
-    """Where is the latest price relative to the bands?"""
-    df = add_bollinger_bands(df)
-    valid = df.dropna(subset=["bb_upper", "bb_lower"])
-    if len(valid) == 0:
-        # Not enough bars to compute BB (typical for monthly timeframe on very young tickers)
-        last = df.iloc[-1]
-        return {
-            "close": last["Close"],
-            "upper": float("nan"),
-            "lower": float("nan"),
-            "mid": float("nan"),
-            "position": float("nan"),
-            "touching_upper": False,
-            "touching_lower": False,
-            "insufficient_data": True,
-        }
-    last = valid.iloc[-1]
-    close = last["Close"]
-    upper = last["bb_upper"]
-    lower = last["bb_lower"]
-    mid = last["bb_mid"]
-    band_width = upper - lower
-
-    # Position: 0 = at lower band, 1 = at upper band
-    if band_width > 0:
-        position = (close - lower) / band_width
-    else:
-        position = 0.5
-
-    touching_upper = last["High"] >= upper
-    touching_lower = last["Low"] <= lower
-
-    return {
-        "close": close,
-        "upper": upper,
-        "lower": lower,
-        "mid": mid,
-        "position": position,
-        "touching_upper": touching_upper,
-        "touching_lower": touching_lower,
-        "insufficient_data": False,
-    }
-
-
-# -----------------------------------------------------------------------------
-# TIMEFRAME RESAMPLING
-# -----------------------------------------------------------------------------
-def resample_to_weekly(daily: pd.DataFrame) -> pd.DataFrame:
-    """Convert daily OHLC to weekly (Mon-Fri) bars."""
-    weekly = daily.resample("W-FRI").agg(
+# =============================================================================
+# RESAMPLING
+# =============================================================================
+def resample_weekly(daily: pd.DataFrame) -> pd.DataFrame:
+    return daily.resample("W-FRI").agg(
         {"Open": "first", "High": "max", "Low": "min", "Close": "last", "Volume": "sum"}
     ).dropna()
-    return weekly
 
 
-def resample_to_monthly(daily: pd.DataFrame) -> pd.DataFrame:
-    """Convert daily OHLC to monthly bars."""
-    monthly = daily.resample("ME").agg(
+def resample_monthly(daily: pd.DataFrame) -> pd.DataFrame:
+    return daily.resample("ME").agg(
         {"Open": "first", "High": "max", "Low": "min", "Close": "last", "Volume": "sum"}
     ).dropna()
-    return monthly
 
 
-# -----------------------------------------------------------------------------
-# PER-TICKER ANALYSIS
-# -----------------------------------------------------------------------------
-def analyze_ticker(symbol: str) -> dict:
-    """Download data and run classification on all three timeframes."""
+# =============================================================================
+# TECHNICAL SCREEN (all three timeframes BULL)
+# =============================================================================
+def check_technicals(symbol: str) -> dict:
+    """Download prices and check monthly/weekly/daily all BULL."""
     try:
-        # yf.download is more forgiving than Ticker().history for indices
         daily = yf.download(
             symbol,
             period=f"{HISTORY_YEARS}y",
@@ -307,289 +307,110 @@ def analyze_ticker(symbol: str) -> dict:
             progress=False,
             threads=False,
         )
-        if daily is None or daily.empty:
-            return {"symbol": symbol, "error": "no data returned from yfinance"}
+        if daily is None or daily.empty or len(daily) < 60:
+            return {"pass": False, "reason": "insufficient price history"}
 
-        # yf.download returns MultiIndex columns when given a single ticker as a list;
-        # flatten if needed
         if isinstance(daily.columns, pd.MultiIndex):
             daily.columns = daily.columns.get_level_values(0)
-
-        if len(daily) < 60:
-            return {"symbol": symbol, "error": f"only {len(daily)} bars available"}
-
-        # Ensure we have a clean tz-naive DatetimeIndex
         daily.index = pd.to_datetime(daily.index)
         if daily.index.tz is not None:
             daily.index = daily.index.tz_localize(None)
 
-        weekly = resample_to_weekly(daily)
-        monthly = resample_to_monthly(daily)
+        weekly = resample_weekly(daily)
+        monthly = resample_monthly(daily)
 
-        return {
-            "symbol": symbol,
-            "daily_class": classify(daily),
-            "weekly_class": classify(weekly),
-            "monthly_class": classify(monthly),
-            "daily_pos": current_band_position(daily),
-            "weekly_pos": current_band_position(weekly),
-            "monthly_pos": current_band_position(monthly),
-            "last_date": daily.index[-1],
-            "last_close": float(daily["Close"].iloc[-1]),
-        }
+        d_state = classify(daily)
+        w_state = classify(weekly)
+        m_state = classify(monthly)
+
+        if m_state == "BULL" and w_state == "BULL" and d_state == "BULL":
+            return {"pass": True, "reason": "M/W/D all BULL"}
+        return {"pass": False, "reason": f"M:{m_state} W:{w_state} D:{d_state}"}
     except Exception as e:
-        import traceback
-        tb = traceback.format_exc()
-        print(f"  ERROR for {symbol}: {tb}")
-        return {"symbol": symbol, "error": f"{type(e).__name__}: {str(e)[:150]}"}
+        return {"pass": False, "reason": f"tech screen error: {str(e)[:50]}"}
 
 
-# -----------------------------------------------------------------------------
-# SETUP DETECTION (THE ACTIONABLE SIGNALS)
-# -----------------------------------------------------------------------------
-def assess_setup(result: dict) -> dict:
-    """Classify the setup strength based on multi-timeframe alignment."""
-    if "error" in result:
-        return {"strength": "ERROR", "label": result["error"]}
-
-    m_state = result["monthly_class"]["state"]
-    w_state = result["weekly_class"]["state"]
-    d_state = result["daily_class"]["state"]
-
-    w_touch_lower = result["weekly_pos"]["touching_lower"]
-    w_touch_upper = result["weekly_pos"]["touching_upper"]
-    d_touch_lower = result["daily_pos"]["touching_lower"]
-    d_touch_upper = result["daily_pos"]["touching_upper"]
-
-    # ---- BUY SETUPS ----
-    if m_state == "BULL":
-        if w_touch_lower and d_touch_lower:
-            return {"strength": "HIGHEST_BUY", "label": "Monthly BULL + Weekly lower BB + Daily lower BB"}
-        if w_state == "BULL" and d_touch_lower:
-            return {"strength": "VERY_STRONG_BUY", "label": "Monthly BULL + Weekly BULL + Daily lower BB"}
-        if w_touch_lower:
-            return {"strength": "STRONG_BUY", "label": "Monthly BULL + Weekly lower BB"}
-        # Partial alignment (watch list)
-        if w_state == "BULL" and d_state == "BULL":
-            return {"strength": "WATCH_BUY", "label": "All timeframes BULL aligned (waiting for pullback)"}
-        if w_state == "BULL":
-            return {"strength": "WATCH_BUY", "label": "Monthly + Weekly BULL (waiting for daily pullback)"}
-
-    # ---- SHORT SETUPS ----
-    if m_state == "BEAR":
-        if w_touch_upper and d_touch_upper:
-            return {"strength": "HIGHEST_SHORT", "label": "Monthly BEAR + Weekly upper BB + Daily upper BB"}
-        if w_state == "BEAR" and d_touch_upper:
-            return {"strength": "VERY_STRONG_SHORT", "label": "Monthly BEAR + Weekly BEAR + Daily upper BB"}
-        if w_touch_upper:
-            return {"strength": "STRONG_SHORT", "label": "Monthly BEAR + Weekly upper BB"}
-        if w_state == "BEAR" and d_state == "BEAR":
-            return {"strength": "WATCH_SHORT", "label": "All timeframes BEAR aligned (waiting for rally)"}
-        if w_state == "BEAR":
-            return {"strength": "WATCH_SHORT", "label": "Monthly + Weekly BEAR (waiting for daily rally)"}
-
-    return {"strength": "NONE", "label": "No actionable setup"}
-
-
-# -----------------------------------------------------------------------------
-# REPORT GENERATION
-# -----------------------------------------------------------------------------
-def format_report(results: list, run_date: str) -> str:
-    """Generate a plain text report."""
-    lines = []
-    lines.append("=" * 78)
-    lines.append("BOLLINGER BAND MULTI-TIMEFRAME SCAN")
-    lines.append(f"Run date: {run_date}")
-    lines.append(f"Tickers scanned: {len(results)}")
-    lines.append("=" * 78)
-    lines.append("")
-
-    # Group by setup strength
-    priority_order = [
-        "HIGHEST_BUY", "VERY_STRONG_BUY", "STRONG_BUY",
-        "HIGHEST_SHORT", "VERY_STRONG_SHORT", "STRONG_SHORT",
-        "WATCH_BUY", "WATCH_SHORT", "NONE", "ERROR",
-    ]
-    grouped = {p: [] for p in priority_order}
-    for r in results:
-        s = r["setup"]["strength"]
-        grouped.setdefault(s, []).append(r)
-
-    # --- Actionable section ---
-    lines.append("ACTIONABLE SETUPS")
-    lines.append("-" * 78)
-    has_actionable = False
-    for strength in ["HIGHEST_BUY", "VERY_STRONG_BUY", "STRONG_BUY",
-                     "HIGHEST_SHORT", "VERY_STRONG_SHORT", "STRONG_SHORT"]:
-        for r in grouped.get(strength, []):
-            has_actionable = True
-            lines.append("")
-            lines.append(f"TICKER:  {r['symbol']}")
-            lines.append(f"SIGNAL:  {strength.replace('_', ' ')}")
-            lines.append(f"REASON:  {r['setup']['label']}")
-            mc = r["monthly_class"]
-            wc = r["weekly_class"]
-            dc = r["daily_class"]
-            lines.append(f"  Monthly: {mc['state']:<8}"
-                         + (f" (confirmed {mc['confirmed_date'].date()} at {mc['confirmed_price']:.2f})"
-                            if mc['confirmed_date'] is not None else ""))
-            lines.append(f"  Weekly:  {wc['state']:<8}"
-                         + (f" (confirmed {wc['confirmed_date'].date()} at {wc['confirmed_price']:.2f})"
-                            if wc['confirmed_date'] is not None else ""))
-            lines.append(f"  Daily:   {dc['state']:<8}"
-                         + (f" (confirmed {dc['confirmed_date'].date()} at {dc['confirmed_price']:.2f})"
-                            if dc['confirmed_date'] is not None else ""))
-            lines.append(f"  Last close: ${r['last_close']:.2f} on {r['last_date'].date()}")
-    if not has_actionable:
-        lines.append("  No actionable setups today.")
-    lines.append("")
-
-    # --- Watch list ---
-    lines.append("")
-    lines.append("WATCH LIST (partial alignment, awaiting band touch)")
-    lines.append("-" * 78)
-    has_watch = False
-    for strength in ["WATCH_BUY", "WATCH_SHORT"]:
-        for r in grouped.get(strength, []):
-            has_watch = True
-            lines.append(f"  {r['symbol']:<8} {strength.replace('_', ' '):<12} {r['setup']['label']}")
-    if not has_watch:
-        lines.append("  None.")
-    lines.append("")
-
-    # --- Full classification table ---
-    lines.append("")
-    lines.append("FULL CLASSIFICATION TABLE")
-    lines.append("-" * 78)
-    lines.append(f"{'Ticker':<8} {'Monthly':<10} {'Weekly':<10} {'Daily':<10} {'Last Close':<12}")
-    lines.append("-" * 78)
-    for r in results:
-        if "error" in r:
-            lines.append(f"{r['symbol']:<8} ERROR: {r['error']}")
-            continue
-        lines.append(
-            f"{r['symbol']:<8} "
-            f"{r['monthly_class']['state']:<10} "
-            f"{r['weekly_class']['state']:<10} "
-            f"{r['daily_class']['state']:<10} "
-            f"${r['last_close']:<11.2f}"
-        )
-    lines.append("")
-    lines.append("=" * 78)
-    lines.append("END OF REPORT")
-    lines.append("=" * 78)
-    return "\n".join(lines)
-
-
-# -----------------------------------------------------------------------------
+# =============================================================================
 # MAIN
-# -----------------------------------------------------------------------------
+# =============================================================================
 def main():
-    # Read tickers
-    if not Path(TICKER_FILE).exists():
-        print(f"ERROR: {TICKER_FILE} not found", file=sys.stderr)
-        sys.exit(1)
-    with open(TICKER_FILE) as f:
-        tickers = [line.strip() for line in f if line.strip() and not line.startswith("#")]
-    if not tickers:
-        print(f"ERROR: no tickers in {TICKER_FILE}", file=sys.stderr)
-        sys.exit(1)
-
-    print(f"Scanning {len(tickers)} tickers...")
     print(f"yfinance version: {yf.__version__}")
-    print(f"pandas version: {pd.__version__}")
-    print("")
+    print(f"pandas version:   {pd.__version__}")
+    print()
 
-    results = []
-    success_count = 0
-    error_count = 0
-    for i, t in enumerate(tickers, 1):
-        print(f"  [{i}/{len(tickers)}] {t}")
-        try:
-            r = analyze_ticker(t)
-            r["setup"] = assess_setup(r)
-            if "error" in r:
-                error_count += 1
-                print(f"      -> {r['error']}")
-            else:
-                success_count += 1
-                print(f"      -> M:{r['monthly_class']['state']} "
-                      f"W:{r['weekly_class']['state']} "
-                      f"D:{r['daily_class']['state']} "
-                      f"close=${r['last_close']:.2f}")
-        except Exception as e:
-            # Should never happen given analyze_ticker handles its own errors,
-            # but belt-and-suspenders so the whole run doesn't die.
-            error_count += 1
-            r = {"symbol": t, "error": f"unhandled: {type(e).__name__}: {str(e)[:100]}",
-                 "setup": {"strength": "ERROR", "label": "unhandled exception"}}
-            print(f"      -> UNHANDLED ERROR: {e}")
-        results.append(r)
+    universe = build_universe()
+    if not universe:
+        print("ERROR: universe is empty. Cannot proceed.")
+        sys.exit(1)
 
-    print(f"\nSuccess: {success_count}, Errors: {error_count}")
+    # Phase 1: fundamental gate (fast, cheap)
+    print(f"Phase 1: fundamental screen on {len(universe)} tickers...")
+    print(f"  Filters: mkt cap > $300M, EPS growth YoY > 20%, avg vol > 200k")
+    print()
 
-    # Always write a report, even on partial failure
+    fund_passed = []
+    fund_stats = {"passed": 0, "failed": 0, "errored": 0}
+    for i, symbol in enumerate(universe, 1):
+        if i % 100 == 0:
+            print(f"  [{i}/{len(universe)}] {fund_stats['passed']} passed so far")
+        f = check_fundamentals(symbol)
+        if f["pass"]:
+            fund_passed.append(symbol)
+            fund_stats["passed"] += 1
+        elif f["reason"].startswith("info fetch"):
+            fund_stats["errored"] += 1
+        else:
+            fund_stats["failed"] += 1
+        time.sleep(FUNDAMENTAL_SLEEP_MS / 1000)
+
+    print()
+    print(f"Fundamental screen complete:")
+    print(f"  Passed:  {fund_stats['passed']}")
+    print(f"  Failed:  {fund_stats['failed']}")
+    print(f"  Errored: {fund_stats['errored']}")
+    print()
+
+    # Phase 2: technical screen (slower, only on fundamental survivors)
+    print(f"Phase 2: technical screen on {len(fund_passed)} tickers...")
+    print(f"  Requires: Monthly + Weekly + Daily all BULL (Interpretation B round-trip)")
+    print()
+
+    tech_passed = []
+    for i, symbol in enumerate(fund_passed, 1):
+        print(f"  [{i}/{len(fund_passed)}] {symbol}", end="", flush=True)
+        t = check_technicals(symbol)
+        if t["pass"]:
+            tech_passed.append(symbol)
+            print(f"  -> PASS")
+        else:
+            print(f"  -> {t['reason']}")
+        time.sleep(DOWNLOAD_SLEEP_MS / 1000)
+
+    print()
+    print(f"Technical screen complete: {len(tech_passed)} tickers passed all filters")
+    print()
+
+    # Write report — ticker symbols only
     Path(REPORTS_DIR).mkdir(exist_ok=True)
     run_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     report_path = Path(REPORTS_DIR) / f"{run_date}.txt"
-    try:
-        report_text = format_report(results, run_date)
-        report_path.write_text(report_text)
-        print(f"\nReport written to {report_path}")
-        print(f"Report size: {report_path.stat().st_size} bytes")
-    except Exception as e:
-        # Even if report formatting fails, write something so the commit step has a file
-        import traceback
-        report_path.write_text(f"Report generation failed: {e}\n\n{traceback.format_exc()}")
-        print(f"Report formatting failed: {e}")
+    report_lines = [
+        "=" * 60,
+        f"SCREENED TICKERS - {run_date}",
+        "=" * 60,
+        f"Universe:              {len(universe)}",
+        f"Passed fundamentals:   {fund_stats['passed']}",
+        f"Passed all filters:    {len(tech_passed)}",
+        "=" * 60,
+        "",
+    ]
+    if tech_passed:
+        report_lines.extend(tech_passed)
+    else:
+        report_lines.append("(no tickers passed all filters today)")
+    report_path.write_text("\n".join(report_lines))
+    print(f"Report written to {report_path}")
 
-    # ------------------------------------------------------------------
-    # OPTIONAL DIAGNOSTIC DUMP
-    # ------------------------------------------------------------------
-    if DIAGNOSTIC_TICKER:
-        print(f"\n--- DIAGNOSTIC DUMP for {DIAGNOSTIC_TICKER} ---")
-        try:
-            daily = yf.download(DIAGNOSTIC_TICKER, period=f"{HISTORY_YEARS}y", interval="1d",
-                                auto_adjust=True, progress=False, threads=False)
-            if isinstance(daily.columns, pd.MultiIndex):
-                daily.columns = daily.columns.get_level_values(0)
-            daily.index = pd.to_datetime(daily.index)
-            if daily.index.tz is not None:
-                daily.index = daily.index.tz_localize(None)
-            weekly = resample_to_weekly(daily)
-            monthly = resample_to_monthly(daily)
-
-            diag_lines = [
-                "=" * 78,
-                f"DIAGNOSTIC TRACE for {DIAGNOSTIC_TICKER}",
-                f"History: {daily.index[0].date()} to {daily.index[-1].date()} ({len(daily)} daily bars)",
-                "=" * 78,
-            ]
-            for label, frame in [("MONTHLY", monthly), ("WEEKLY", weekly), ("DAILY", daily)]:
-                diag_lines.append("")
-                diag_lines.append(f"--- {label} TIMEFRAME ---")
-                diag_lines.append(f"Bars: {len(frame)}")
-                result = classify(frame, diagnostic=True)
-                diag_lines.append(f"Final state: {result['state']}")
-                if result['confirmed_date'] is not None:
-                    diag_lines.append(f"Last confirmation: {result['confirmed_date'].date()} at ${result['confirmed_price']:.2f}")
-                diag_lines.append(f"Number of state changes in history: {len(result['history'])}")
-                diag_lines.append("")
-                diag_lines.append("Full event trace (chronological):")
-                if not result['trace']:
-                    diag_lines.append("  (no events)")
-                for ev_date, ev_type, ev_detail in result['trace']:
-                    diag_lines.append(f"  {ev_date.date()}  {ev_type:<25} {ev_detail}")
-
-            diag_path = Path(REPORTS_DIR) / f"diagnostic_{DIAGNOSTIC_TICKER}.txt"
-            diag_path.write_text("\n".join(diag_lines))
-            print(f"Diagnostic dump written to {diag_path}")
-        except Exception as e:
-            import traceback
-            print(f"Diagnostic dump failed: {e}")
-            print(traceback.format_exc())
-
-    # Exit cleanly so the commit step still runs
     sys.exit(0)
 
 

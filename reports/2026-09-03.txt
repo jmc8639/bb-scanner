@@ -2,8 +2,8 @@
 SCREENED TICKERS - 2026-09-03
 ============================================================
 Universe:              503
-Passed fundamentals:   202
-Passed all filters:    161
+Passed fundamentals:   203
+Passed all filters:    162
 ============================================================
 
 ABBV
@@ -105,6 +105,7 @@ LYV
 LMT
 MPC
 MRVL
+MDT
 MU
 MSFT
 MDLZ

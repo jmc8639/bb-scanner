@@ -2,7 +2,7 @@
 SCREENED TICKERS - 2026-09-10
 ============================================================
 Universe:              503
-Passed fundamentals:   204
+Passed fundamentals:   205
 Passed all filters:    163
 ============================================================
 
@@ -116,6 +116,7 @@ NTAP
 NEE
 NKE
 NDSN
+NTRS
 NUE
 NXPI
 ODFL
@@ -162,7 +163,6 @@ VLO
 VEEV
 WEC
 WELL
-WY
 WSM
 WDAY
 XEL
